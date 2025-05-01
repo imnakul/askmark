@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useOutsideClick } from '@/hooks/use-outside-click'
+import { SquarePen, ArrowUpRight } from 'lucide-react'
 
 export function ExpandableCardDemo() {
    const [active, setActive] = useState(null)
@@ -66,8 +67,13 @@ export function ExpandableCardDemo() {
                   <motion.div
                      layoutId={`card-${active.title}-${id}`}
                      ref={ref}
-                     className='w-full max-w-[900px] h-full md:h-fit md:max-h-[70%] grid grid-cols-2 bg-white dark:bg-cyan-800 sm:rounded-3xl overflow-hidden mt-16'
+                     className='relative w-full max-w-[900px] h-full md:h-fit md:max-h-[70%] grid grid-cols-2 bg-white 
+                     dark:bg-cyan-700/95 sm:rounded-3xl overflow-hidden mt-16'
                   >
+                     <div className='absolute top-8 left-10'>
+                        <SquarePen className='size-6' />
+                     </div>
+
                      <motion.div
                         layoutId={`image-${active.title}-${id}`}
                         className='w-full h-[70vh] flex items-center justify-center '
@@ -83,18 +89,24 @@ export function ExpandableCardDemo() {
 
                      <div className='h-[90vh] overflow-y-auto pr-4 '>
                         <div className='flex justify-between items-start p-4 '>
-                           <div className=''>
+                           <div className='pt-4'>
                               <motion.h3
                                  layoutId={`title-${active.title}-${id}`}
                                  className='font-medium text-neutral-700 dark:text-neutral-200 text-base'
                               >
-                                 {active.title}
+                                 Title: {active.title}
                               </motion.h3>
                               <motion.p
                                  layoutId={`description-${active.description}-${id}`}
                                  className='text-neutral-600 dark:text-neutral-400 text-base'
                               >
-                                 {active.description}
+                                 Description: {active.description}
+                              </motion.p>
+                              <motion.p
+                                 layoutId={`description-${active.note}-${id}`}
+                                 className='text-neutral-600 dark:text-neutral-400 text-base'
+                              >
+                                 Note: {active.note}
                               </motion.p>
                            </div>
 
@@ -105,18 +117,18 @@ export function ExpandableCardDemo() {
                               exit={{ opacity: 0 }}
                               href={active.ctaLink}
                               target='_blank'
-                              className='px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white'
+                              className='px-4 py-2 text-sm rounded-lg font-bold bg-green-500 text-white mt-4'
                            >
                               {active.ctaText}
                            </motion.a>
                         </div>
-                        <div className='pt-4 relative px-4'>
+                        <div className='overflow-y-auto h-[50vh] relative px-4 '>
                            <motion.div
                               layout
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
-                              className='text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]'
+                              className='text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400'
                            >
                               {typeof active.content === 'function'
                                  ? active.content()
@@ -205,6 +217,7 @@ const cards = [
    {
       description: 'Lana Del Rey',
       title: 'Summertime Sadness',
+      note: 'To Save',
       src: '/fb.jpg',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
@@ -242,7 +255,8 @@ const cards = [
    {
       description: 'Babbu Maan',
       title: 'Mitran Di Chhatri',
-      src: 'https://assets.aceternity.com/demos/babbu-maan.jpeg',
+      note: 'To Save',
+      src: '/fb.jpg',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
       content: () => {
@@ -266,7 +280,8 @@ const cards = [
    {
       description: 'Metallica',
       title: 'For Whom The Bell Tolls',
-      src: 'https://assets.aceternity.com/demos/metallica.jpeg',
+      note: 'To Save',
+      src: '/fb.jpg',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
       content: () => {
@@ -289,7 +304,8 @@ const cards = [
    {
       description: 'Lord Himesh',
       title: 'Aap Ka Suroor',
-      src: 'https://assets.aceternity.com/demos/aap-ka-suroor.jpeg',
+      note: 'To Save',
+      src: '/fb.jpg',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
       content: () => {
@@ -311,7 +327,8 @@ const cards = [
    {
       description: 'Lord Himesh',
       title: 'Aap Ka Suroor asaSA',
-      src: 'https://assets.aceternity.com/demos/aap-ka-suroor.jpeg',
+      note: 'To Save',
+      src: '/fb.jpg',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
       content: () => {
@@ -333,7 +350,7 @@ const cards = [
    {
       description: 'Lord Himesh',
       title: 'Aap Ka Suroor sdsadwsa s',
-      src: 'https://assets.aceternity.com/demos/aap-ka-suroor.jpeg',
+      src: '/fb.jpg',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
       content: () => {
