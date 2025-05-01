@@ -42,7 +42,7 @@ export const NavBody = ({ children, className, visible }) => {
          }}
          className={cn(
             'relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-xl bg-transparent px-4 py-2 lg:flex dark:bg-transparent',
-            visible && 'bg-white/80 dark:bg-cyan-600/30',
+            visible && 'bg-white/80 dark:bg-cyan-900/70',
             className
          )}
       >

@@ -97,7 +97,7 @@ function Collections() {
                               className=' transition-all duration-200 cursor-pointer'
                            >
                               <BookmarkPlus
-                                 className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                 className={`sm:size-6 size-4 transition-transform duration-200 hover:text-cyan-500  ${
                                     showModal ? 'rotate-360' : ''
                                  }`}
                               />
@@ -113,7 +113,7 @@ function Collections() {
                            `}
                               >
                                  <Funnel
-                                    className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                    className={`sm:size-6 size-4 transition-transform duration-200 hover:text-cyan-500 ${
                                        !showDropdown ? 'rotate-360' : ''
                                     }`}
                                  />
@@ -134,7 +134,6 @@ function Collections() {
                                        </span>
                                     </button>
 
-                                    {/* Feedback & Contact */}
                                     <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
                                        <Wrench className='size-5' />
                                        <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>
@@ -162,13 +161,13 @@ function Collections() {
                      </>
                   ) : (
                      <>
-                        <div className='flex items-center gap-4 justify-center px-2 py-1 w-full '>
+                        <div className='flex items-center gap-4 justify-center px-2 py-1 w-full'>
                            <button
                               onClick={handleShowModal}
                               className='cursor-pointer'
                            >
                               <BookmarkPlus
-                                 className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                 className={`sm:size-6 size-4 transition-transform duration-200 hover:text-cyan-500 ${
                                     showModal ? 'rotate-360' : ''
                                  }`}
                               />
@@ -181,7 +180,7 @@ function Collections() {
                                  className='transition-all duration-200 cursor-pointer'
                               >
                                  <Funnel
-                                    className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                    className={`sm:size-6 size-4 transition-transform duration-200 hover:text-cyan-500 ${
                                        !showDropdown ? 'rotate-360' : ''
                                     }`}
                                  />

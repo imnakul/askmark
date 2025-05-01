@@ -140,13 +140,13 @@ export function ExpandableCardDemo() {
                </div>
             ) : null}
          </AnimatePresence>
-         <ul className='max-w-8xl mx-auto w-full grid grid-cols-1 md:grid-cols-4 items-start gap-3'>
+         <ul className='max-w-8xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 items-start gap-3'>
             {cards.map((card, index) => (
                <motion.div
                   layoutId={`card-${card.title}-${id}`}
                   key={card.title}
                   onClick={() => setActive(card)}
-                  className='p-4 flex flex-col  hover:bg-neutral-50 dark:hover:bg-cyan-700 rounded-xl cursor-pointer '
+                  className='p-4 flex flex-col  hover:bg-neutral-50 dark:hover:bg-cyan-700 rounded-xl cursor-pointer  transition-all duration-300 ease-in-out hover:scale-105'
                >
                   <div className='flex gap-4 flex-col  w-full'>
                      <motion.div layoutId={`image-${card.title}-${id}`}>
