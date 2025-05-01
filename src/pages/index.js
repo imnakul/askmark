@@ -1,10 +1,8 @@
-import { Collections } from '@/components/Collections'
+import { Collections } from '@/pages/collections'
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams'
 import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight'
 import { SmoothCursor } from '@/components/ui/smooth-cursor'
 import { motion } from 'motion/react'
-import { Search } from '@/components/ui/search'
-import { Footer } from '@/components/ui/footer'
 
 function index() {
    return (
@@ -42,11 +40,10 @@ function index() {
 
          {/* <BackgroundBeamsWithCollision> */}
          {/* <div className='flex flex-col items-center w-screen h-screen '> */}
-         <Search />
+
          <Collections />
          {/* </div> */}
          {/* </BackgroundBeamsWithCollision> */}
-         <Footer />
       </>
    )
 }

@@ -1,9 +1,9 @@
 export function Search() {
    return (
-      <form className='w-full max-w-xl mx-auto mt-10'>
+      <form className='w-full max-w-lg mx-auto'>
          <label
             for='default-search'
-            className='mb-2 text-base font-medium text-gray-900 sr-only dark:text-white'
+            className='mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white'
          >
             Search
          </label>
@@ -28,7 +28,7 @@ export function Search() {
             <input
                type='search'
                id='default-search'
-               className='block w-full p-4 ps-10 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500 outline-none focus:ring-2'
+               className='block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500 outline-none focus:ring-2'
                placeholder='Search Bookmarks...'
                required
             />
