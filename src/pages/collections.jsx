@@ -1,7 +1,14 @@
 import { HoverEffect } from '../components/ui/card-hover-effect'
 import { Search } from '@/components/ui/search'
 import { Footer } from '@/components/ui/footer'
-import { BookmarkPlus } from 'lucide-react'
+import {
+   FileText,
+   Youtube,
+   Wrench,
+   Funnel,
+   BookmarkPlus,
+   Star,
+} from 'lucide-react'
 
 import {
    Navbar,
@@ -14,7 +21,7 @@ import {
    MobileNavToggle,
    MobileNavMenu,
 } from '@/components/ui/resizable-navbar'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useScroll, useMotionValueEvent } from 'motion/react'
 import { ExpandableCardDemo } from '@/components/ui/expandable-card-demo'
 
@@ -38,6 +45,23 @@ function Collections() {
    const [visible, setVisible] = useState(false)
    const ref = useRef(null)
    const [QR, setQR] = useState(false)
+   const [showDropdown, setShowDropdown] = useState(false)
+   const [showModal, setShowModal] = useState(false)
+   const dropdownRef = useRef(null)
+
+   // Handle click outside to close dropdown
+   useEffect(() => {
+      function handleClickOutside(event) {
+         if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target)
+         ) {
+            setShowDropdown(false)
+         }
+      }
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+   }, [])
 
    const { scrollY } = useScroll({
       target: ref,
@@ -53,7 +77,7 @@ function Collections() {
    })
 
    const handleShowModal = () => {
-      console.log('Open Modal here')
+      setShowModal(!showModal)
    }
 
    return (
@@ -67,18 +91,59 @@ function Collections() {
                   {!visible ? (
                      <>
                         <NavbarLogo />
-                        <div className='flex items-center gap-4 justify-center px-2 py-1 w-full max-w-xl'>
-                           <button onClick={handleShowModal}>
-                              <img
-                                 src='/add.png'
-                                 href='https://www.flaticon.com/free-icons/save'
-                                 className='size-10 cursor-pointer'
+                        <div className='flex items-center gap-5 justify-center px-2 py-1 w-full max-w-xl'>
+                           <button
+                              onClick={handleShowModal}
+                              className=' transition-all duration-200 cursor-pointer'
+                           >
+                              <BookmarkPlus
+                                 className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                    showModal ? 'rotate-360' : ''
+                                 }`}
                               />
                            </button>
                            <Search />
-                           <select className='w-24'>
-                              <option>English</option>
-                           </select>
+                           {/* //~ Dropdown */}
+                           <div className='relative' ref={dropdownRef}>
+                              <button
+                                 onClick={() => setShowDropdown(!showDropdown)}
+                                 className={`
+                              transition-all duration-200 cursor-pointer
+                              
+                           `}
+                              >
+                                 <Funnel
+                                    className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                       !showDropdown ? 'rotate-360' : ''
+                                    }`}
+                                 />
+                              </button>
+                              {showDropdown && (
+                                 <div className='absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 transform opacity-100 scale-100 transition-all duration-200 origin-top-right'>
+                                    <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
+                                       <FileText className='size-5' />
+                                       <span className='space-grotesk  text-sm text-gray-700 dark:text-gray-300'>
+                                          Document
+                                       </span>
+                                    </button>
+
+                                    <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
+                                       <Youtube className='size-5' />
+                                       <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>
+                                          Video
+                                       </span>
+                                    </button>
+
+                                    {/* Feedback & Contact */}
+                                    <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
+                                       <Wrench className='size-5' />
+                                       <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>
+                                          Tool
+                                       </span>
+                                    </button>
+                                 </div>
+                              )}
+                           </div>
                         </div>
                         <div className='flex items-center gap-4 justify-center px-2 py-1'>
                            <button onClick={() => setQR(!QR)} className=''>
@@ -97,20 +162,56 @@ function Collections() {
                      </>
                   ) : (
                      <>
-                        <div className='flex items-center gap-4 justify-center px-2 py-1 w-full'>
-                           {/* <BookmarkPlus />
-                     <span className='font-bold'>Add Bookmark</span> */}
-                           <button onClick={handleShowModal}>
-                              <img
-                                 src='/add.png'
-                                 href='https://www.flaticon.com/free-icons/save'
-                                 className='size-10 cursor-pointer'
+                        <div className='flex items-center gap-4 justify-center px-2 py-1 w-full '>
+                           <button
+                              onClick={handleShowModal}
+                              className='cursor-pointer'
+                           >
+                              <BookmarkPlus
+                                 className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                    showModal ? 'rotate-360' : ''
+                                 }`}
                               />
                            </button>
                            <Search />
-                           <select className='w-24 p-2 outline:none focus:outline-none hover:ring-2 hover:ring-cyan-400 rounded-lg'>
-                              <option className='my-1 p-2'>English</option>
-                           </select>
+                           {/* //~ Dropdown */}
+                           <div className='relative' ref={dropdownRef}>
+                              <button
+                                 onClick={() => setShowDropdown(!showDropdown)}
+                                 className='transition-all duration-200 cursor-pointer'
+                              >
+                                 <Funnel
+                                    className={`sm:size-8 size-4 transition-transform duration-200 ${
+                                       !showDropdown ? 'rotate-360' : ''
+                                    }`}
+                                 />
+                              </button>
+                              {showDropdown && (
+                                 <div className='absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 transform opacity-100 scale-100 transition-all duration-200 origin-top-right'>
+                                    <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
+                                       <FileText className='size-5' />
+                                       <span className='space-grotesk  text-sm text-gray-700 dark:text-gray-300'>
+                                          Document
+                                       </span>
+                                    </button>
+
+                                    <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
+                                       <Youtube className='size-5' />
+                                       <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>
+                                          Video
+                                       </span>
+                                    </button>
+
+                                    {/* Feedback & Contact */}
+                                    <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
+                                       <Wrench className='size-5' />
+                                       <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>
+                                          Tool
+                                       </span>
+                                    </button>
+                                 </div>
+                              )}
+                           </div>
                         </div>
                      </>
                   )}
