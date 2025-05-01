@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/resizable-navbar'
 import { useState, useRef } from 'react'
 import { useScroll, useMotionValueEvent } from 'motion/react'
+import { ExpandableCardDemo } from '@/components/ui/expandable-card-demo'
 
 const navItems = [
    {
@@ -35,6 +36,7 @@ function Collections() {
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
    const [visible, setVisible] = useState(false)
    const ref = useRef(null)
+   const [QR, setQR] = useState(false)
 
    const { scrollY } = useScroll({
       target: ref,
@@ -52,23 +54,29 @@ function Collections() {
    return (
       <>
          {/* //?? NAVBAR  */}
-         <div className='relative w-full'>
+         <div className=' w-full'>
             <Navbar visible={visible}>
                {/* Desktop Navigation */}
                <NavBody>
                   {!visible && <NavbarLogo />}
                   <Search />
-                  <AddModal />
+                  {/* <AddModal /> */}
                   {/* <NavItems items={navItems} /> */}
                   {!visible && (
                      <div className='flex items-center gap-4'>
-                        <NavbarButton variant='secondary'>
+                        {/* <NavbarButton variant='secondary'>
                            Feedback
                         </NavbarButton>
-                        <NavbarButton variant='secondary'>Contact</NavbarButton>
+                        <NavbarButton variant='secondary'>Contact</NavbarButton> */}
                         <NavbarButton variant='secondary'>Login</NavbarButton>
                      </div>
                   )}
+                  <button onClick={() => setQR(!QR)} className=''>
+                     <img
+                        src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnplZnJ5ZWZmc3ZlaWg2bGU5eGZ0N2JzMDVoczk3bnNqMjJ0MXd6NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TDQOtnWgsBx99cNoyH/giphy.gif'
+                        className='size-10 cursor-pointer'
+                     />
+                  </button>
                </NavBody>
 
                {/* Mobile Navigation */}
@@ -110,10 +118,34 @@ function Collections() {
          </div>
 
          {/* //?? MAIN CONTENT  */}
-         <div className='w-full bg-gradient-to-br from-cyan-700 via-purple-950 to-gray-700'>
+         {/* <div className=' w-full bg-gradient-to-br from-cyan-700 via-purple-950 to-gray-700'> */}
+         <div className=' w-full bg-gradient-to-br from-gray-900 via-gray-700 to-gray-900'>
             <div className='max-w-7xl mx-auto px-8 pt-20 '>
                {/* <Search /> */}
-               <HoverEffect items={projects} />
+               {/* <HoverEffect items={projects} /> */}
+               <ExpandableCardDemo />
+               {/* //?? QR MODAL */}
+               {QR && (
+                  <div
+                     className='fixed inset-0 z-40 bg-black/30 backdrop-blur-sm'
+                     onClick={() => setQR(false)}
+                  >
+                     <div className='fixed top-1/2 left-1/2 z-100 -translate-x-1/2 -translate-y-1/2  border border-cyan-500 bg-cyan-500/60 flex flex-col gap-4  p-2 rounded-lg items-center justify-center backdrop-blur-2xl '>
+                        <a
+                           href='https://www.buymeacoffee.com/imnakul'
+                           target='_blank'
+                        >
+                           <img src='/qr.png' className='size-72' />
+                        </a>
+                        <span className='text-lg text-white pb-2'>
+                           Scan / Click to{' '}
+                           <span className='text-gradient'>
+                              Give me a Boost
+                           </span>
+                        </span>
+                     </div>
+                  </div>
+               )}
                <Footer />
             </div>
          </div>

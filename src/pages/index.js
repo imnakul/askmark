@@ -1,12 +1,16 @@
-import { Collections } from '@/pages/collections'
-import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams'
+// import { Collections } from '@/pages/collections'
+// import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams'
 import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight'
 import { SmoothCursor } from '@/components/ui/smooth-cursor'
 import { motion } from 'motion/react'
+import { Button } from '@/components/ui/moving-border'
+import { useRouter } from 'next/router'
 
 function index() {
+   const router = useRouter()
    return (
       <>
+         {/* <BackgroundBeamsWithCollision> */}
          <SmoothCursor />
 
          <HeroHighlight>
@@ -36,13 +40,28 @@ function index() {
                   Bookmarks That Let You Ask Questions About the Pages You Save.
                </span>
             </motion.h1>
+            <div className='flex items-center justify-center pt-2 w-full '>
+               <Button
+                  onClick={() => {
+                     router.push('/collections')
+                  }}
+                  borderRadius='1.2rem'
+                  className='bg-white dark:bg-slate-900 text-black dark:text-white border-neutral-200 dark:border-slate-800 font-bold text-base cursor-pointer'
+               >
+                  Get Started
+               </Button>
+            </div>
+            <a
+               href='https://www.buymeacoffee.com/imnakul'
+               target='_blank'
+               className='fixed bottom-10 right-10'
+            >
+               <img
+                  src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnplZnJ5ZWZmc3ZlaWg2bGU5eGZ0N2JzMDVoczk3bnNqMjJ0MXd6NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TDQOtnWgsBx99cNoyH/giphy.gif'
+                  className='size-16 cursor-pointer'
+               />
+            </a>
          </HeroHighlight>
-
-         {/* <BackgroundBeamsWithCollision> */}
-         {/* <div className='flex flex-col items-center w-screen h-screen '> */}
-
-         <Collections />
-         {/* </div> */}
          {/* </BackgroundBeamsWithCollision> */}
       </>
    )

@@ -1,21 +1,16 @@
 'use client'
 import { cn } from '@/lib/utils'
 // import { IconMenu2, IconX } from '@tabler/icons-react'
-import {
-   motion,
-   AnimatePresence,
-   useScroll,
-   useMotionValueEvent,
-} from 'motion/react'
-
-import React, { useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
 
 export const Navbar = ({ children, className, visible, ref }) => {
    return (
       <motion.div
          ref={ref}
          // IMPORTANT: Change this to class of `fixed` if you want the navbar to be fixed
-         className={cn('fixed inset-x-0  z-40 w-full', className)}
+         className={cn('fixed inset-x-0 z-40 w-full', className)}
       >
          {React.Children.map(children, (child) =>
             React.isValidElement(child)
@@ -162,18 +157,21 @@ export const MobileNavToggle = ({ isOpen, onClick }) => {
 }
 
 export const NavbarLogo = () => {
+   const router = useRouter()
    return (
       <a
          href='#'
          className='relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black'
       >
-         <img
-            src='https://assets.aceternity.com/logo-dark.png'
-            alt='logo'
-            width={30}
-            height={30}
-         />
-         <span className='font-medium text-black dark:text-white'>AskMark</span>
+         <img src='/logo.jpg' alt='logo' className='size-12' />
+         <span
+            className='font-medium text-black dark:text-white text-xl'
+            onClick={() => {
+               router.push('/')
+            }}
+         >
+            AskMark
+         </span>
       </a>
    )
 }
