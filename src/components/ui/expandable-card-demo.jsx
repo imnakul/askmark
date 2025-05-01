@@ -139,7 +139,7 @@ export function ExpandableCardDemo() {
                   <div className='flex gap-4 flex-col  w-full'>
                      <motion.div layoutId={`image-${card.title}-${id}`}>
                         <img
-                           width={100}
+                           width={400}
                            height={100}
                            src={card.src}
                            alt={card.title}

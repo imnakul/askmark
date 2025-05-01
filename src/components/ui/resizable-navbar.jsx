@@ -161,11 +161,11 @@ export const NavbarLogo = () => {
    return (
       <a
          href='#'
-         className='relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black'
+         className='relative z-20 mr-4 flex items-center space-x-1 px-2 py-1 text-sm font-normal text-black'
       >
          <img src='/logo.jpg' alt='logo' className='size-12' />
          <span
-            className='font-medium text-black dark:text-white text-xl'
+            className='font-bold text-black dark:text-white text-xl'
             onClick={() => {
                router.push('/')
             }}

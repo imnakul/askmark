@@ -1,14 +1,14 @@
 export function Footer() {
    return (
       <footer className='bg-white rounded-lg shadow-sm dark:bg-black/20 mt-4 mx-4 '>
-         <div className='w-full max-w-7xl mx-auto p-4 '>
+         <div className='w-full max-w-7xl mx-auto px-4 py-1 '>
             <div className='sm:flex sm:items-center sm:justify-between'>
                <a
                   href='https://flowbite.com/'
-                  className='flex items-center mb-6 sm:mb-0 space-x-3 rtl:space-x-reverse'
+                  className='flex items-center mb-6 sm:mb-0 space-x-1 rtl:space-x-reverse'
                >
-                  <img src='/logo.jpg' className='h-8' alt='Askmark logo' />
-                  <span className='self-center text-2xl font-semibold whitespace-nowrap dark:text-white'>
+                  <img src='/logo.jpg' className='size-12' alt='Askmark logo' />
+                  <span className='self-center font-bold text-black text-xl whitespace-nowrap dark:text-white'>
                      AskMark
                   </span>
                </a>
@@ -31,15 +31,12 @@ export function Footer() {
                      </a>
                   </li> */}
                   <li>
-                     <a
-                        href='#'
-                        className='hover:underline me-4 md:me-6 text-lg '
-                     >
+                     <a href='#' className='hover:underline me-4 md:me-6 '>
                         <span className='text-base'>Feedback</span>
                      </a>
                   </li>
                   <li>
-                     <a href='#' className='hover:underline'>
+                     <a href='#' className='hover:underline me-4 md:me-6'>
                         <span className='text-base'>Contact</span>
                      </a>
                   </li>
