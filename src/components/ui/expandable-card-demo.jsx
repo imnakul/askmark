@@ -128,7 +128,7 @@ export function ExpandableCardDemo() {
                </div>
             ) : null}
          </AnimatePresence>
-         <ul className='max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-4 items-start gap-4'>
+         <ul className='max-w-8xl mx-auto w-full grid grid-cols-1 md:grid-cols-4 items-start gap-3'>
             {cards.map((card, index) => (
                <motion.div
                   layoutId={`card-${card.title}-${id}`}
@@ -238,138 +238,7 @@ const cards = [
          )
       },
    },
-   {
-      description: 'Lana Del Rey',
-      title: 'Summertime Sadness',
-      src: '/fb.jpg',
-      ctaText: 'Visit',
-      ctaLink: 'https://ui.aceternity.com/templates',
-      content: () => {
-         return (
-            <p>
-               Lana Del Rey, an iconic American singer-songwriter, is celebrated
-               for her melancholic and cinematic music style. Born Elizabeth
-               Woolridge Grant in New York City, she has captivated audiences
-               worldwide with her haunting voice and introspective lyrics.{' '}
-               <br /> <br />
-               Her songs often explore themes of tragic romance, glamour, and
-               melancholia, drawing inspiration from both contemporary and
-               vintage pop culture. With a career that has seen numerous
-               critically acclaimed albums, Lana Del Rey has established herself
-               as a unique and influential figure in the music industry, earning
-               a dedicated fan base and numerous accolades.
-            </p>
-         )
-      },
-   },
-   {
-      description: 'Lana Del Rey',
-      title: 'Summertime Sadness',
-      src: '/fb.jpg',
-      ctaText: 'Visit',
-      ctaLink: 'https://ui.aceternity.com/templates',
-      content: () => {
-         return (
-            <p>
-               Lana Del Rey, an iconic American singer-songwriter, is celebrated
-               for her melancholic and cinematic music style. Born Elizabeth
-               Woolridge Grant in New York City, she has captivated audiences
-               worldwide with her haunting voice and introspective lyrics.{' '}
-               <br /> <br />
-               Her songs often explore themes of tragic romance, glamour, and
-               melancholia, drawing inspiration from both contemporary and
-               vintage pop culture. With a career that has seen numerous
-               critically acclaimed albums, Lana Del Rey has established herself
-               as a unique and influential figure in the music industry, earning
-               a dedicated fan base and numerous accolades.
-            </p>
-         )
-      },
-   },
-   {
-      description: 'Lana Del Rey',
-      title: 'Summertime Sadness',
-      src: '/fb.jpg',
-      ctaText: 'Visit',
-      ctaLink: 'https://ui.aceternity.com/templates',
-      content: () => {
-         return (
-            <p>
-               Lana Del Rey, an iconic American singer-songwriter, is celebrated
-               for her melancholic and cinematic music style. Born Elizabeth
-               Woolridge Grant in New York City, she has captivated audiences
-               worldwide with her haunting voice and introspective lyrics.{' '}
-               <br /> <br />
-               Her songs often explore themes of tragic romance, glamour, and
-               melancholia, drawing inspiration from both contemporary and
-               vintage pop culture. With a career that has seen numerous
-               critically acclaimed albums, Lana Del Rey has established herself
-               as a unique and influential figure in the music industry, earning
-               a dedicated fan base and numerous accolades.Her songs often
-               explore themes of tragic romance, glamour, and melancholia,
-               drawing inspiration from both contemporary and vintage pop
-               culture. With a career that has seen numerous critically
-               acclaimed albums, Lana Del Rey has established herself as a
-               unique and influential figure in the music industry, earning a
-               dedicated fan base and numerous accolades.Her songs often explore
-               themes of tragic romance, glamour, and melancholia, drawing
-               inspiration from both contemporary and vintage pop culture. With
-               a career that has seen numerous critically acclaimed albums, Lana
-               Del Rey has established herself as a unique and influential
-               figure in the music industry, earning a dedicated fan base and
-               numerous accolades.
-            </p>
-         )
-      },
-   },
-   {
-      description: 'Lana Del Rey',
-      title: 'Summertime Sadness',
-      src: '/fb.jpg',
-      ctaText: 'Visit',
-      ctaLink: 'https://ui.aceternity.com/templates',
-      content: () => {
-         return (
-            <p>
-               Lana Del Rey, an iconic American singer-songwriter, is celebrated
-               for her melancholic and cinematic music style. Born Elizabeth
-               Woolridge Grant in New York City, she has captivated audiences
-               worldwide with her haunting voice and introspective lyrics.{' '}
-               <br /> <br />
-               Her songs often explore themes of tragic romance, glamour, and
-               melancholia, drawing inspiration from both contemporary and
-               vintage pop culture. With a career that has seen numerous
-               critically acclaimed albums, Lana Del Rey has established herself
-               as a unique and influential figure in the music industry, earning
-               a dedicated fan base and numerous accolades.
-            </p>
-         )
-      },
-   },
-   {
-      description: 'Lana Del Rey',
-      title: 'Summertime Sadness',
-      src: '/fb.jpg',
-      ctaText: 'Visit',
-      ctaLink: 'https://ui.aceternity.com/templates',
-      content: () => {
-         return (
-            <p>
-               Lana Del Rey, an iconic American singer-songwriter, is celebrated
-               for her melancholic and cinematic music style. Born Elizabeth
-               Woolridge Grant in New York City, she has captivated audiences
-               worldwide with her haunting voice and introspective lyrics.{' '}
-               <br /> <br />
-               Her songs often explore themes of tragic romance, glamour, and
-               melancholia, drawing inspiration from both contemporary and
-               vintage pop culture. With a career that has seen numerous
-               critically acclaimed albums, Lana Del Rey has established herself
-               as a unique and influential figure in the music industry, earning
-               a dedicated fan base and numerous accolades.
-            </p>
-         )
-      },
-   },
+
    {
       description: 'Babbu Maan',
       title: 'Mitran Di Chhatri',
@@ -420,6 +289,50 @@ const cards = [
    {
       description: 'Lord Himesh',
       title: 'Aap Ka Suroor',
+      src: 'https://assets.aceternity.com/demos/aap-ka-suroor.jpeg',
+      ctaText: 'Visit',
+      ctaLink: 'https://ui.aceternity.com/templates',
+      content: () => {
+         return (
+            <p>
+               Himesh Reshammiya, a renowned Indian music composer, singer, and
+               actor, is celebrated for his distinctive voice and innovative
+               compositions. Born in Mumbai, India, he has become a prominent
+               figure in the Bollywood music industry. <br /> <br />
+               His songs often feature a blend of contemporary and traditional
+               Indian music, capturing the essence of modern Bollywood
+               soundtracks. With a career spanning over two decades, Himesh
+               Reshammiya has released numerous hit albums and singles that have
+               garnered him a massive fan following both in India and abroad.
+            </p>
+         )
+      },
+   },
+   {
+      description: 'Lord Himesh',
+      title: 'Aap Ka Suroor asaSA',
+      src: 'https://assets.aceternity.com/demos/aap-ka-suroor.jpeg',
+      ctaText: 'Visit',
+      ctaLink: 'https://ui.aceternity.com/templates',
+      content: () => {
+         return (
+            <p>
+               Himesh Reshammiya, a renowned Indian music composer, singer, and
+               actor, is celebrated for his distinctive voice and innovative
+               compositions. Born in Mumbai, India, he has become a prominent
+               figure in the Bollywood music industry. <br /> <br />
+               His songs often feature a blend of contemporary and traditional
+               Indian music, capturing the essence of modern Bollywood
+               soundtracks. With a career spanning over two decades, Himesh
+               Reshammiya has released numerous hit albums and singles that have
+               garnered him a massive fan following both in India and abroad.
+            </p>
+         )
+      },
+   },
+   {
+      description: 'Lord Himesh',
+      title: 'Aap Ka Suroor sdsadwsa s',
       src: 'https://assets.aceternity.com/demos/aap-ka-suroor.jpeg',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
