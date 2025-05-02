@@ -20,7 +20,7 @@ const socials = [
 
 function ContactDetails() {
    return (
-      <div className='glass-effect rounded-xl p-2 card-glow h-full'>
+      <div className='glass-effect bg-black/30 rounded-xl p-2 card-glow h-full'>
          <p className=' text-gray-900 dark:text-gray-300 mb-6 inter'>
             I'm always open to new opportunities and collaborations. Feel free
             to reach out if you have a project in mind or just want to connect!

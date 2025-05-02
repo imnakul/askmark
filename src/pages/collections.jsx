@@ -24,6 +24,7 @@ import {
 import { useState, useRef, useEffect } from 'react'
 import { useScroll, useMotionValueEvent } from 'motion/react'
 import { ExpandableCardDemo } from '@/components/ui/expandable-card-demo'
+import Modal from '@/components/ui/modal'
 
 const navItems = [
    {
@@ -46,7 +47,7 @@ function Collections() {
    const ref = useRef(null)
    const [QR, setQR] = useState(false)
    const [showDropdown, setShowDropdown] = useState(false)
-   const [showModal, setShowModal] = useState(false)
+   const [showbookmarkModal, setShowBookmarkModal] = useState(false)
    const dropdownRef = useRef(null)
 
    // Handle click outside to close dropdown
@@ -77,7 +78,7 @@ function Collections() {
    })
 
    const handleShowModal = () => {
-      setShowModal(!showModal)
+      setShowBookmarkModal(!showbookmarkModal)
    }
 
    return (
@@ -98,7 +99,7 @@ function Collections() {
                            >
                               <BookmarkPlus
                                  className={`sm:size-6 size-4 transition-transform duration-200 hover:text-cyan-500  ${
-                                    showModal ? 'rotate-360' : ''
+                                    showbookmarkModal ? 'rotate-360' : ''
                                  }`}
                               />
                            </button>
@@ -168,7 +169,7 @@ function Collections() {
                            >
                               <BookmarkPlus
                                  className={`sm:size-6 size-4 transition-transform duration-200 hover:text-cyan-500 ${
-                                    showModal ? 'rotate-360' : ''
+                                    showbookmarkModal ? 'rotate-360' : ''
                                  }`}
                               />
                            </button>
@@ -263,25 +264,41 @@ function Collections() {
                <ExpandableCardDemo />
                {/* //?? QR MODAL */}
                {QR && (
-                  <div
-                     className='fixed inset-0 z-40 bg-black/30 backdrop-blur-sm'
-                     onClick={() => setQR(false)}
+                  <Modal
+                     showModal={QR}
+                     setShowModal={setQR}
+                     modalContainerClass={
+                        'w-[80vw] sm:w-full sm:max-w-sm sm:p-10'
+                     }
+                     closeModalOutsideClick={() => setQR(false)}
+                     header='Scan / Click to Give me a Boost'
                   >
-                     <div className='fixed top-1/2 left-1/2 z-100 -translate-x-1/2 -translate-y-1/2  border border-cyan-500 bg-cyan-500/60 flex flex-col gap-4  p-2 rounded-lg items-center justify-center backdrop-blur-2xl '>
+                     <div className='flex items-center justify-center w-full p-2'>
                         <a
                            href='https://www.buymeacoffee.com/imnakul'
                            target='_blank'
                         >
                            <img src='/qr.png' className='size-72' />
                         </a>
+                     </div>
+                  </Modal>
+               )}
+               {showbookmarkModal && (
+                  <Modal
+                     showModal={showbookmarkModal}
+                     setShowModal={setShowBookmarkModal}
+                     header='Add New Bookmark'
+                  >
+                     <div className='flex flex-col gap-4'>
                         <span className='text-lg text-white pb-2'>
-                           Scan / Click to{' '}
+                           Scan / Click to
                            <span className='text-gradient'>
                               Give me a Boost
                            </span>
                         </span>
+                        <img src='/qr.png' className='size-72' />
                      </div>
-                  </div>
+                  </Modal>
                )}
                <Footer />
             </div>
