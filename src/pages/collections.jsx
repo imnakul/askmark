@@ -289,14 +289,58 @@ function Collections() {
                      setShowModal={setShowBookmarkModal}
                      header='Add New Bookmark'
                   >
-                     <div className='flex flex-col gap-4'>
-                        <span className='text-lg text-white pb-2'>
-                           Scan / Click to
-                           <span className='text-gradient'>
-                              Give me a Boost
-                           </span>
-                        </span>
-                        <img src='/qr.png' className='size-72' />
+                     <div className='flex flex-col gap-4 p-4 w-full bg-black/30 rounded-md'>
+                        <div className='flex items-center justify-center gap-2 w-full  '>
+                           <img
+                              className='w-72 h-44 p-2 border border-cyan-300 rounded-md'
+                              alt='Upload Thumbnail'
+                           />
+                        </div>
+                        <div className='flex items-center justify-start gap-2 w-full  '>
+                           Title:
+                           <input
+                              type='text'
+                              className='p-2 border border-cyan-300 rounded-md w-full'
+                              placeholder='Title'
+                           />
+                        </div>
+                        <div className='flex items-center justify-start gap-2 w-full  '>
+                           Link:
+                           <input
+                              type='text'
+                              className='p-2 border border-cyan-300 rounded-md w-full'
+                              placeholder='Url'
+                           />
+                        </div>
+                        <div className='flex items-center justify-start gap-2 w-full  '>
+                           Desc:
+                           <input
+                              type='text'
+                              className='p-2 border border-cyan-300 rounded-md w-full'
+                              placeholder='Description'
+                           />
+                        </div>
+                        <div className='flex items-center justify-start gap-2 w-full  '>
+                           Note:
+                           <input
+                              type='text'
+                              className='p-2 border border-cyan-300 rounded-md w-full'
+                              placeholder='Note'
+                           />
+                        </div>
+                        <div className='flex items-center justify-start gap-2 w-full  '>
+                           Tags:
+                           <input
+                              type='text'
+                              className='p-2 border border-cyan-300 rounded-md w-full'
+                              placeholder='Tags'
+                           />
+                        </div>
+                        <div className='flex items-center justify-center gap-2 w-full  '>
+                           <button className='btn border border-cyan-300 bg-cyan-800 px-3 py-1 rounded-md'>
+                              Add
+                           </button>
+                        </div>
                      </div>
                   </Modal>
                )}
