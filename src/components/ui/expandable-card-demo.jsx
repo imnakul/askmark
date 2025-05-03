@@ -4,11 +4,18 @@ import React, { useEffect, useId, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useOutsideClick } from '@/hooks/use-outside-click'
 import { SquarePen, ArrowUpRight } from 'lucide-react'
+import { webExtractor } from '@/functions/webExtractor'
 
 export function ExpandableCardDemo() {
    const [active, setActive] = useState(null)
    const id = useId()
    const ref = useRef(null)
+
+   useEffect(() => {
+      // webExtractor(
+      //    'https://js.langchain.com/docs/integrations/document_loaders/web_loaders/web_cheerio/'
+      // )
+   })
 
    useEffect(() => {
       function onKeyDown(event) {
@@ -155,7 +162,7 @@ export function ExpandableCardDemo() {
                            height={100}
                            src={card.src}
                            alt={card.title}
-                           className='h-60 w-full rounded-lg object-cover object-top'
+                           className='h-60 w-full rounded-lg object-contain'
                         />
                      </motion.div>
                      <div className='flex justify-center items-center flex-col'>
@@ -218,7 +225,7 @@ const cards = [
       description: 'Lana Del Rey',
       title: 'Summertime Sadness',
       note: 'To Save',
-      src: '/fb.jpg',
+      src: 'https://www.youtube.com/img/desktop/yt_1200.png',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
       content: () => {
@@ -256,7 +263,7 @@ const cards = [
       description: 'Babbu Maan',
       title: 'Mitran Di Chhatri',
       note: 'To Save',
-      src: '/fb.jpg',
+      src: 'https://www.youtube.com/s/desktop/3747f4fc/img/logos/favicon_32x32.png',
       ctaText: 'Visit',
       ctaLink: 'https://ui.aceternity.com/templates',
       content: () => {
