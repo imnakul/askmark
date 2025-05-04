@@ -54,7 +54,7 @@ function Modal({
                         initial='hidden'
                         animate='visible'
                         exit='exit'
-                        className={`relative transform overflow-hidden rounded-lg backdrop-blur-lg  px-3 pt-1 pb-3 text-left shadow-xl  sm:p-6 bg-cyan-700/60 ${modalContainerClass}`}
+                        className={`relative transform overflow-hidden rounded-lg backdrop-blur-lg  px-3 pt-1 pb-3 text-left shadow-xl  sm:p-6 bg-white/30 dark:bg-gray-800/20{modalContainerClass}`}
                      >
                         {/*//~ Close Button */}
                         <div className='absolute right-0 top-0 pr-4 pt-4'>
