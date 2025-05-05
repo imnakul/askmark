@@ -37,15 +37,14 @@ function Collections() {
    const [cardView, setCardView] = useState(false)
    const [headlineView, setHeadlineView] = useState(false)
 
-   const handleUrlSubmit = async () => {
+   const handleUrlSubmit = async (e) => {
+      e.preventDefault()
+      if (!webUrl) {
+         alert('Please enter a valid URL.')
+         return
+      }
       if (webUrl) {
-         const { t, d, tg, th, l } = await webExtractor(webUrl)
-         setTitle(t)
-         setDescription(d)
-         setTags(tg)
-         setThumbnail(th)
-         setLink(l)
-         setFetchedData(true)
+         webExtractor(webUrl)
       } else {
          console.log('Invalid or Empty URL ')
       }
@@ -276,15 +275,7 @@ function Collections() {
                      {/* //~ Add bookmark  */}
                      <form
                         className='w-full max-w-lg mx-auto'
-                        onSubmit={(e) => {
-                           e.preventDefault()
-                           if (!webUrl) {
-                              alert('Please enter a valid URL.')
-                              return
-                           }
-
-                           // handle your logic here (like calling a function)
-                        }}
+                        onSubmit={(e) => handleUrlSubmit(e)}
                      >
                         <label
                            htmlFor='search'
@@ -334,12 +325,12 @@ function Collections() {
                            }}
                         >
                            <span className='flex items-center gap-2'>
-                              List <LayoutList className='size-4' />
+                              Detailed <LayoutList className='size-4' />
                            </span>
                         </button>
                         <button
                            type='button'
-                           className='px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-cyan-700 focus:z-10 focus:ring-2 focus:ring-cyan-700 focus:text-cyan-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-cyan-500 dark:focus:text-white cursor-pointer'
+                           className='px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-cyan-700 focus:z-10 focus:ring-2 focus:ring-cyan-700 focus:text-cyan-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-cyan-500 dark:focus:text-white cursor-pointer '
                            onClick={() => {
                               setCardView(true)
                               setListView(false)

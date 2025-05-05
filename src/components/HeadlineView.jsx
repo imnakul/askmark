@@ -12,7 +12,7 @@ function HeadlineView() {
       <>
          <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 gap-4 h-[70vh] overflow-y-auto pr-4'>
             {projects.map((project) => (
-               <div className='relative bg-black/30 border border-teal-400 w-full shadow-sm h-14 rounded-md hover:translate-y-1.5 transition duration-300'>
+               <div className='card relative bg-black/30 border border-teal-400 w-full shadow-sm h-14 rounded-md hover:translate-y-1.5 transition duration-200'>
                   <div className='w-full h-full flex items-center justify-start px-4'>
                      <div className='w-4/5 flex items-center gap-2'>
                         <button

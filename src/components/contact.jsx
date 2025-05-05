@@ -51,7 +51,7 @@ function ContactDetails() {
                <a
                   href='https://nakul-srivastava-dev.vercel.app/'
                   target='_blank'
-                  className={`text-gray-900 dark:text-gray-300 rounded-md w-24 flex items-center justify-center cursor-pointer   transition-colors duration-300   hover:opacity-80 hover:scale-105 active:scale-95 py-1 px-2 space-grotesk text-sm border border-solid border-gray-900 dark:border-gray-300`}
+                  className={`text-gray-900 dark:text-gray-300 rounded-md w-24 flex items-center justify-center cursor-pointer   transition-colors duration-300   hover:opacity-80 hover:scale-105 active:scale-95 py-1 px-2 space-grotesk text-sm border border-solid border-gray-900 dark:border-gray-300 mr-4`}
                >
                   Portfolio
                   <ArrowUpRight className='ml-1 size-5' />

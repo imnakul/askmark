@@ -82,3 +82,30 @@ body {
   background: var(--secondary);
 }
 
+.card:hover {
+  background: linear-gradient(145deg, rgba(3, 86, 105, 0.3), rgba(46, 185, 223, 0.3));
+  box-shadow: 0 4px 10px rgba(46, 185, 223, 0.5);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* //~BorderGLow  */
+/* .card:hover {
+  border-color: rgba(46, 185, 223, 0.8);
+  box-shadow: 0 0 20px rgba(0, 198, 252, 0.8);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+} */
+
+/* //~Background blur + Inner glow  */
+/* .card:hover {
+  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 10px rgba(46, 185, 223, 0.5);
+  transition: backdrop-filter 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+} */
+
+/* //~ Inner Glow */
+/* .card:hover {
+  box-shadow: inset 0 0 10px rgba(46, 185, 223, 0.5);
+  transition: box-shadow 0.3s ease;
+} */
+

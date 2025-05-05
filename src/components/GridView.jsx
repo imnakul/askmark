@@ -10,9 +10,9 @@ import {
 function GridView() {
    return (
       <>
-         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 h-[70vh] overflow-y-auto pr-2'>
+         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 h-[70vh] overflow-y-auto space-y-2 p-2'>
             {projects.map((project) => (
-               <div className='card bg-black/30 w-80 shadow-sm rounded-md hover:translate-y-1.5 transition duration-300 hover:scale-105'>
+               <div className='card w-88 md:w-60 lg:w-78 bg-black/30 shadow-sm rounded-md transition duration-200 hover:scale-105'>
                   <figure>
                      <img
                         src='https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp'
