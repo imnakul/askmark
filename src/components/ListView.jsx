@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import {
    Star,
    Pencil,
@@ -8,27 +10,49 @@ import {
 } from 'lucide-react'
 
 function ListView() {
+   const dispatch = useDispatch()
+   const bookmarks = useSelector((state) => state.bookmarks.bookmarks)
+
+   const handleDelete = (id) => {
+      if (window.confirm('Are you sure you want to delete this bookmark?')) {
+         dispatch(removeBookmark(id))
+      }
+   }
+
    return (
       <>
-         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 h-[70vh] overflow-y-auto space-y-2 p-2 '>
-            {projects.map((project) => (
-               <div className='card w-88 md:w-60 lg:w-78 relative bg-black/30 border border-teal-400 card-md shadow-sm rounded-md  transition duration-200 hover:scale-105'>
-                  <div className='card-body p-5'>
-                     <h2 className='card-title'>{project.title}</h2>
-                     <div className='absolute top-3 right-3 '>
+         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 h-[70vh] overflow-y-auto space-y-2 p-2'>
+            {bookmarks.map((bookmark) => (
+               <div
+                  key={bookmark.id}
+                  className={`card w-88 md:w-60 lg:w-78 relative bg-black/30 border border-teal-400 card-md shadow-sm rounded-md transition duration-200 hover:scale-105 h-44 `}
+               >
+                  <div className='card-body px-3 py-3'>
+                     <div className='flex items-center justify-start gap-4'>
+                        <img
+                           type='icon'
+                           src={bookmark.thumbnail}
+                           alt='favicon'
+                           className='size-8'
+                        />
+                        <h2 className='card-title w-56 text-base '>
+                           {bookmark.title}
+                        </h2>
+                     </div>
+                     {/* <div className='absolute top-3 right-3'>
                         <button
                            title='Ask a question'
                            className='cursor-pointer'
                         >
                            <MessageCircleQuestion className='size-7 text-cyan-300 hover:animate-spin' />
                         </button>
-                     </div>
-                     <p>{project.description}</p>
+                     </div> */}
+                     <p>{bookmark.description}</p>
                      <div className='flex items-center justify-between mt-2'>
-                        <div className='badge badge-outline badge-xs'>
-                           Fashion
+                        <div className='badge badge-outline badge-sm '>
+                           {bookmark.tags?.join(', ') || 'No tags'}
                         </div>
-                        <div className='justify-end card-actions w-full gap-1 '>
+                        <div className='justify-end card-actions w-full gap-1'>
                            <button
                               className='btn btn-sm hover:opacity-70 cursor-pointer'
                               title='Edit'
@@ -38,6 +62,7 @@ function ListView() {
                            <button
                               className='btn btn-sm hover:opacity-70 cursor-pointer'
                               title='Delete'
+                              onClick={() => handleDelete(bookmark.id)}
                            >
                               <Trash className='size-5 text-red-400 p-0.5' />
                            </button>
@@ -47,13 +72,15 @@ function ListView() {
                            >
                               <Star className='size-5 text-teal-400 p-0.5' />
                            </button>
-
-                           <button
+                           <a
+                              href={bookmark.link}
+                              target='_blank'
+                              rel='noopener noreferrer'
                               className='btn btn-sm hover:opacity-70 cursor-pointer'
                               title='Open'
                            >
                               <ExternalLink className='size-5 text-blue-400 p-0.5' />
-                           </button>
+                           </a>
                         </div>
                      </div>
                   </div>
@@ -63,103 +90,5 @@ function ListView() {
       </>
    )
 }
-export default ListView
 
-export const projects = [
-   {
-      title: 'Stripe',
-      description:
-         'A technology company that builds economic infrastructure for the internet.',
-      link: 'https://stripe.com',
-   },
-   {
-      title: 'Netflix',
-      description:
-         'A streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.',
-      link: 'https://netflix.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-   {
-      title: 'Amazon',
-      description:
-         'A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.',
-      link: 'https://amazon.com',
-   },
-   {
-      title: 'Microsoft',
-      description:
-         'A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.',
-      link: 'https://microsoft.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-   {
-      title: 'Amazon',
-      description:
-         'A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.',
-      link: 'https://amazon.com',
-   },
-   {
-      title: 'Microsoft',
-      description:
-         'A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.',
-      link: 'https://microsoft.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-   {
-      title: 'Amazon',
-      description:
-         'A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.',
-      link: 'https://amazon.com',
-   },
-   {
-      title: 'Microsoft',
-      description:
-         'A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.',
-      link: 'https://microsoft.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-]
+export default ListView

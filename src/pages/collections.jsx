@@ -17,8 +17,14 @@ import Navbar from '@/components/ui/Navbar'
 import ListView from '@/components/ListView'
 import GridView from '@/components/GridView'
 import HeadlineView from '@/components/HeadlineView'
+import { useDispatch, useSelector } from 'react-redux'
+import { addBookmark } from '@/store/slices/bookmarksSlice'
+import { CircleDashed } from 'lucide-react'
 
 function Collections() {
+   const dispatch = useDispatch()
+   const bookmarks = useSelector((state) => state.bookmarks.bookmarks)
+
    const [visible, setVisible] = useState(false)
    const ref = useRef(null)
    const [QR, setQR] = useState(false)
@@ -36,23 +42,18 @@ function Collections() {
    const [listView, setListView] = useState(true)
    const [cardView, setCardView] = useState(false)
    const [headlineView, setHeadlineView] = useState(false)
+   const [loading, setLoading] = useState(false)
 
    const handleUrlSubmit = async (e) => {
-      // e.preventDefault()
-      // if (!webUrl) {
-      //    alert('Please enter a valid URL.')
-      //    return
-      // }
-      // if (webUrl) {
-      //    webExtractor(webUrl)
-      // } else {
-      //    console.log('Invalid or Empty URL ')
-      // }
       e.preventDefault()
+      setLoading(true)
+
       if (!webUrl) {
          alert('Please enter a valid URL.')
          return
-      } else {
+      }
+
+      try {
          const response = await fetch(
             `/api/extract?url=${encodeURIComponent(webUrl)}`
          )
@@ -60,9 +61,30 @@ function Collections() {
          const json = await response.json()
          if (json.success) {
             console.log('Extracted Data:', json.data)
+            // Add the bookmark to Redux store
+            dispatch(
+               addBookmark({
+                  title: json.data.title || 'Untitled',
+                  description: json.data.metaDescription || '',
+                  link: webUrl,
+                  thumbnail: json.data.favicon || '',
+                  tags: [], // Can be updated later
+                  createdAt: new Date().toISOString(),
+               })
+            )
+
+            // Clear the input
+            setWebUrl('')
+            // Show success message or notification
          } else {
             console.error('Error:', json.error)
+            // Show error message
          }
+      } catch (error) {
+         console.error('Error extracting data:', error)
+         // Show error message
+      } finally {
+         setLoading(false)
       }
    }
 
@@ -145,24 +167,6 @@ function Collections() {
                      closeModalOutsideClick={() => setShowBookmarkModal(false)}
                   >
                      {!fetchedData ? (
-                        // <div className='flex items-center justify-center gap-4 p-2 w-full rounded-md'>
-                        //    <label className='input active:outline-none hover:outline-none focus:outline-none focus-within:outline-none '>
-                        //       <span className='label'>URL</span>
-                        //       <input
-                        //          type='text'
-                        //          className=''
-                        //          value={webUrl}
-                        //          onChange={(e) => setWebUrl(e.target.value)}
-                        //          placeholder='https://'
-                        //       />
-                        //    </label>
-                        //    <button
-                        //       onClick={handleUrlSubmit}
-                        //       className='btn btn-primary rounded-md p-1.5'
-                        //    >
-                        //       Add
-                        //    </button>
-                        // </div>
                         <div
                            className='flex items-center justify-center w-full p-2 rounded-md'
                            role='form'
@@ -314,13 +318,13 @@ function Collections() {
                               <img
                                  src='/add.png'
                                  alt='logo'
-                                 className='size-5'
+                                 className='size-7 '
                               />
                            </div>
                            <input
                               type='url'
                               id='search'
-                              class='block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-cyan-400  focus:outline-none'
+                              class=' block w-full p-3 ps-13 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-cyan-400  focus:outline-none'
                               placeholder='https://example.com'
                               value={webUrl}
                               onChange={(e) => setWebUrl(e.target.value)}
@@ -328,7 +332,7 @@ function Collections() {
                            />
                            <button
                               type='submit'
-                              class='text-white absolute end-2.5 bottom-2.5 bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200'
+                              class='text-white absolute end-2.5 bottom-[7px] bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200'
                            >
                               Add
                            </button>
@@ -477,6 +481,14 @@ function Collections() {
                      </div>
 
                      <div className='w-full lg:w-5/6 h-full items-center p-2  '>
+                        {loading && (
+                           <div className='flex flex-col items-center justify-center h-full px-4 sm:px-6 lg:px-8'>
+                              <CircleDashed className='text-cyan-400 font-bold text-4xl sm:text-5xl lg:text-6xl animate-spin mb-4' />
+                              <p className='text-xl sm:text-2xl font-semibold text-cyan-500 mb-4 text-center'>
+                                 Adding bookmark...
+                              </p>
+                           </div>
+                        )}
                         {listView && <ListView />}
                         {cardView && <GridView />}
                         {headlineView && <HeadlineView />}
