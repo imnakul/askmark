@@ -28,14 +28,14 @@ function ListView() {
                   className={`card w-88 md:w-60 lg:w-78 relative bg-black/30 border border-teal-400 card-md shadow-sm rounded-md transition duration-200 hover:scale-105 h-44 `}
                >
                   <div className='card-body px-3 py-3'>
-                     <div className='flex items-center justify-start gap-4'>
+                     <div className='flex items-center justify-start gap-3'>
                         <img
                            type='icon'
                            src={bookmark.thumbnail}
                            alt='favicon'
                            className='size-8'
                         />
-                        <h2 className='card-title w-56 text-base '>
+                        <h2 className='card-title w-56 text-sm '>
                            {bookmark.title}
                         </h2>
                      </div>
@@ -47,7 +47,7 @@ function ListView() {
                            <MessageCircleQuestion className='size-7 text-cyan-300 hover:animate-spin' />
                         </button>
                      </div> */}
-                     <p>{bookmark.description}</p>
+                     <p className='text-xs h-10 py-1'>{bookmark.description}</p>
                      <div className='flex items-center justify-between mt-2'>
                         <div className='badge badge-outline badge-sm '>
                            {bookmark.tags?.join(', ') || 'No tags'}

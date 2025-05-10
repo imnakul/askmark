@@ -4,7 +4,6 @@ export default function Document() {
    return (
       <Html lang='en'>
          <Head>
-            <title>AskMark</title>
             <meta
                name='description'
                content='Smart Bookmarks who answer your questions about them.'
