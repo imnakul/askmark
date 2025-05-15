@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import {
-   Star,
+   InfoIcon,
    Pencil,
    ExternalLink,
    MessageCircleQuestion,
    Trash,
+   Info,
 } from 'lucide-react'
 
 function ListView() {
@@ -63,7 +64,7 @@ function ListView() {
                            className='p-1.5 rounded-full bg-green-700/80 hover:bg-green-600 transition'
                            title='Edit'
                         >
-                           <Pencil className='size-5 text-white' />
+                           <InfoIcon className='size-5 text-white' />
                         </button>
                         <button
                            className='p-1.5 rounded-full bg-red-700/80 hover:bg-red-600 transition'

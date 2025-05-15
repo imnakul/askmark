@@ -61,6 +61,15 @@ function Collections() {
          const json = await response.json()
          if (json.success) {
             console.log('Extracted Data:', json.data)
+            const {
+               category,
+               shortSummary,
+               tags,
+               suggestedTitle,
+               topicArea,
+               tone,
+               suggestedAction,
+            } = json.data.aiAnalysis
             // Add the bookmark to Redux store
             dispatch(
                addBookmark({
@@ -68,9 +77,14 @@ function Collections() {
                   description: json.data.metaDescription || '',
                   link: webUrl,
                   thumbnail: json.data.favicon || '',
-                  tags: [], // Can be updated later
+                  tags: [...tags], // Can be updated later
                   createdAt: new Date().toISOString(),
-                  category: json.data.category,
+                  category: category,
+                  shortSummary: shortSummary,
+                  suggestedTitle: suggestedTitle,
+                  topicArea: topicArea,
+                  tone: tone,
+                  suggestedAction: suggestedAction,
                })
             )
 
@@ -251,11 +265,11 @@ function Collections() {
                )}
 
                {/* //? MAIN CONTAINER  */}
-               <div className='w-full  bg-white/5 flex flex-col items-center justify-end p-2 gap-2'>
-                  <div className='flex items-center justify-between w-full h-16  px-4'>
-                     <div className='flex items-center gap-2 w-1/5 '>
+               <div className='w-full bg-white/5 flex flex-col items-center justify-end p-2 gap-2'>
+                  {/* //?? TOPBAR  */}
+                  <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between w-full h-auto min-h-16 gap-2 px-2 sm:px-4 py-2 bg-white/5 rounded-md shadow-sm'>
+                     <div className='flex items-center gap-2 w-full sm:w-1/5'>
                         {/* //~Search  */}
-
                         <input
                            placeholder='Search Bookmark'
                            className='py-2 px-3 rounded-md bg-gray-800 border-cyan-300 border w-full text-sm focus:outline-none focus:ring focus:ring-cyan-400'
@@ -264,10 +278,7 @@ function Collections() {
                         <div className='relative' ref={dropdownRef}>
                            <button
                               onClick={() => setShowDropdown(!showDropdown)}
-                              className={`
-                              transition-all duration-500 cursor-pointer
-                              
-                           `}
+                              className={`transition-all duration-500 cursor-pointer`}
                            >
                               <Funnel
                                  className={`size-5 transition-transform duration-200 text-cyan-300 hover:text-cyan-600  ${
@@ -309,12 +320,12 @@ function Collections() {
                      >
                         <label
                            htmlFor='search'
-                           class='mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white'
+                           className='mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white'
                         >
                            Bookmark Url
                         </label>
-                        <div class='relative'>
-                           <div class='absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none'>
+                        <div className='relative'>
+                           <div className='absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none'>
                               {/* <BookmarkPlus className={`size-5 `} /> */}
                               <img
                                  src='/add.png'
@@ -325,7 +336,7 @@ function Collections() {
                            <input
                               type='url'
                               id='search'
-                              class=' block w-full p-3 ps-13 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-cyan-400  focus:outline-none'
+                              className='block w-full p-3 ps-13 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-cyan-400  focus:outline-none'
                               placeholder='https://example.com'
                               value={webUrl}
                               onChange={(e) => setWebUrl(e.target.value)}
@@ -333,7 +344,7 @@ function Collections() {
                            />
                            <button
                               type='submit'
-                              class='text-white absolute end-2.5 bottom-[7px] bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200'
+                              className='text-white absolute end-2.5 bottom-[7px] bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200'
                            >
                               Add
                            </button>
@@ -342,7 +353,7 @@ function Collections() {
 
                      {/* //~View Modes  */}
                      <div
-                        className='inline-flex rounded-md justify-center items-center '
+                        className='inline-flex rounded-md justify-center items-center w-full sm:w-auto mt-2 sm:mt-0'
                         role='group'
                      >
                         <button
@@ -386,7 +397,7 @@ function Collections() {
                         </button>
                      </div>
                   </div>
-
+                  {/* //~ Sidebar  */}
                   <div className='flex items-center justify-center w-full h-[58vh] md:h-[76vh] lg:h-[73vh] gap-2 '>
                      {/* <div className='hidden lg:block w-1/6 h-full items-center border border-teal-400 p-4 bg-white/10 rounded-md'>
                         Collections
@@ -490,9 +501,9 @@ function Collections() {
                               </p>
                            </div>
                         )}
-                        {listView && <ListView />}
-                        {cardView && <GridView />}
-                        {headlineView && <HeadlineView />}
+                        {listView && <ListView bookmarks={bookmarks} />}
+                        {cardView && <GridView bookmarks={bookmarks} />}
+                        {headlineView && <HeadlineView bookmarks={bookmarks} />}
                      </div>
                   </div>
                </div>

@@ -94,38 +94,82 @@
 //    }
 // }
 
+//~Working just commented to make it better
+// async function categorizePage({ title, metaDescription, keywords, tags }) {
+//    const llm = new ChatGoogleGenerativeAI({
+//       model: 'gemini-2.0-flash',
+//       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+//       temperature: 0,
+//    })
+//    try {
+//       const systemPrompt = `
+// You are a smart assistant that helps classify web pages into categories based on their metadata.
+// Given the title, description, keywords, and tags of a web page, analyze the intent and purpose of the page.
+
+// Return one of the following categories as your response, and nothing else:
+// 1. Social Media Platform
+// 2. Tools
+// 3. Landing Page
+// 4. Article / Documentation
+// 5. Videos
+// 6. Images
+// 7. Search Engine
+
+// Be concise and objective. Respond with only the category name.
+
+// Example:
+// Title: Google Search
+// Description : N/A
+
+// Response: Search Engine
+// `
+
+//       const userPrompt = `
+// Title: ${title}
+// Description: ${metaDescription}
+// Keywords: ${keywords?.join(', ') || 'N/A'}
+// Tags: ${tags?.join(', ') || 'N/A'}
+// `
+
+//       const response = await llm.invoke([
+//          { role: 'system', content: systemPrompt },
+//          { role: 'user', content: userPrompt },
+//       ])
+
+//       console.log(`📂 Suggested Category: ${response.content}`)
+//       return response.content
+//    } catch (err) {
+//       console.error('❌ Error invoking Gemini:', err.message)
+//       return null
+//    }
+// }
+
 async function categorizePage({ title, metaDescription, keywords, tags }) {
    const llm = new ChatGoogleGenerativeAI({
       model: 'gemini-2.0-flash',
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
-      temperature: 0,
+      temperature: 0.4, // Slightly creative for summary/tags
    })
+
    try {
       const systemPrompt = `
-You are a smart assistant that helps classify web pages into categories based on their metadata.
-Given the title, description, keywords, and tags of a web page, analyze the intent and purpose of the page.
+You are an intelligent assistant that classifies and enriches web bookmarks based on their metadata.
+Given the title, meta description, keywords, and tags, return the following in **valid JSON format**:
 
-Return one of the following categories as your response, and nothing else:
-1. Social Media Platform
-2. Tools
-3. Landing Page
-4. Article / Documentation
-5. Videos
-6. Images
-7. Search Engine
+- category: One of ["Social Media Platform", "Tools", "Landing Page", "Article / Documentation", "Videos", "Images", "Search Engine"]
+- shortSummary: A concise 20-word (max) description of the page's content or purpose.
+- tags: 3 to 6 relevant tags, lowercase and hyphenated (e.g., "ai", "photo-editing", "javascript").
+- suggestedTitle: A cleaner or user-friendly version of the original title.
+- topicArea: High-level domain like "AI", "Design", "Web Development", "Marketing", etc.
+- tone: One word to describe tone — e.g., "Technical", "Casual", "Inspiring", "Tutorial"
+- suggestedAction: Suggest how the user might use the page. Examples: "Read later", "Try this tool", "Use daily", "Watch now"
 
-Be concise and objective. Respond with only the category name.
-
-Example:
-Title: Google Search
-Description : N/A
-
-Response: Search Engine
+Be concise, objective, and return **valid JSON only**.
 `
 
       const userPrompt = `
 Title: ${title}
-Description: ${metaDescription}
+Description: ${metaDescription || 'N/A'}
 Keywords: ${keywords?.join(', ') || 'N/A'}
 Tags: ${tags?.join(', ') || 'N/A'}
 `
@@ -135,8 +179,23 @@ Tags: ${tags?.join(', ') || 'N/A'}
          { role: 'user', content: userPrompt },
       ])
 
-      console.log(`📂 Suggested Category: ${response.content}`)
-      return response.content
+      const content = response.content.trim()
+
+      try {
+         // Clean up code block if present
+         const cleanContent = response.content
+            .replace(/```json/g, '')
+            .replace(/```/g, '')
+            .trim()
+
+         const enriched = JSON.parse(cleanContent)
+         console.log('🔖 Enriched Metadata:', enriched)
+         return enriched
+      } catch (parseErr) {
+         console.error('❌ JSON parsing failed:', parseErr.message)
+         console.log('⚠️ Raw LLM Response:', content)
+         return null
+      }
    } catch (err) {
       console.error('❌ Error invoking Gemini:', err.message)
       return null
@@ -200,12 +259,13 @@ export async function webExtractor(web_url) {
          .map((_, el) => $(el).text().trim())
          .get()
 
-      const category = await categorizePage({
+      const aiAnalysis = await categorizePage({
          title,
          metaDescription,
          keywords,
          tags,
       })
+      console.log('🔖 AI Analysis:', aiAnalysis)
 
       const hasArticleTag = $('article').length > 0
       const hasVideoTag = $('video').length > 0
@@ -232,7 +292,7 @@ export async function webExtractor(web_url) {
          hasArticleTag,
          hasVideoTag,
          hasCanvasTag,
-         category,
+         aiAnalysis,
       }
    } catch (error) {
       console.error('❌ webExtractor error:', error.message)
