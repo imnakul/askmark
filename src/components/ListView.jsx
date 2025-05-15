@@ -25,6 +25,14 @@ function ListView() {
    return (
       <>
          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 h-[70vh] overflow-y-auto custom-scrollbar p-2'>
+            {bookmarks.length === 0 && (
+               <div
+                  className='flex flex-col items-center justify-center h-full 
+               lg:w-[60vw] w-[90vw] md:w-[90vw]'
+               >
+                  <p className='text-gray-400'>No bookmarks yet.</p>
+               </div>
+            )}
             {bookmarks.map((bookmark) => (
                <div
                   key={bookmark.id}

@@ -501,9 +501,15 @@ function Collections() {
                               </p>
                            </div>
                         )}
-                        {listView && <ListView bookmarks={bookmarks} />}
-                        {cardView && <GridView bookmarks={bookmarks} />}
-                        {headlineView && <HeadlineView bookmarks={bookmarks} />}
+                        {listView && !loading && (
+                           <ListView bookmarks={bookmarks} />
+                        )}
+                        {cardView && !loading && (
+                           <GridView bookmarks={bookmarks} />
+                        )}
+                        {headlineView && !loading && (
+                           <HeadlineView bookmarks={bookmarks} />
+                        )}
                      </div>
                   </div>
                </div>
