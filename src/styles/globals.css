@@ -63,6 +63,13 @@ body {
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
+.action-btn {
+  outline: none;
+  box-shadow: 0 2px 8px 0 rgba(0,255,255,0.08);
+  transition: box-shadow 0.2s, background 0.2s, border 0.2s, transform 0.1s;
+  will-change: transform, box-shadow;
+}
+
 /* //~BorderGLow  */
 /* .card:hover {
   border-color: rgba(46, 185, 223, 0.8);
