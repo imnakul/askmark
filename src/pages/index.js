@@ -55,7 +55,7 @@ function Index() {
                target='_blank'
                className='fixed bottom-10 right-10'
             >
-               <Image
+               <img
                   src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnplZnJ5ZWZmc3ZlaWg2bGU5eGZ0N2JzMDVoczk3bnNqMjJ0MXd6NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TDQOtnWgsBx99cNoyH/giphy.gif'
                   width={64}
                   height={64}

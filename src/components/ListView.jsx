@@ -10,7 +10,7 @@ import {
    Info,
 } from 'lucide-react'
 
-function ListView({ bookmarks }) {
+function ListView({ handleShowModal, bookmarks }) {
    const dispatch = useDispatch()
 
    const handleDelete = (id) => {
@@ -67,7 +67,8 @@ function ListView({ bookmarks }) {
                      <div className='flex gap-2'>
                         <button
                            className='group bg-white/10 border border-cyan-300/30 shadow-md hover:bg-cyan-400/30 hover:border-cyan-300/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 min-w-0'
-                           title='Edit'
+                           title='More Info'
+                           onClick={() => handleShowModal(bookmark)}
                         >
                            <InfoIcon className='size-4 text-cyan-200 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]' />
                         </button>
