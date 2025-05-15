@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import {
    Star,
@@ -8,11 +8,8 @@ import {
    Trash,
 } from 'lucide-react'
 
-function GridView() {
+function GridView({ bookmarks }) {
    const dispatch = useDispatch()
-   const bookmarks = useSelector((state) =>
-      Array.isArray(state.bookmarks?.bookmarks) ? state.bookmarks.bookmarks : []
-   )
 
    const handleDelete = (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {

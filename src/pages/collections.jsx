@@ -7,6 +7,8 @@ import {
    LayoutList,
    List,
    LayoutGrid,
+   CircleDashed,
+   SortAsc,
 } from 'lucide-react'
 
 import { useState, useRef, useEffect } from 'react'
@@ -19,7 +21,6 @@ import GridView from '@/components/GridView'
 import HeadlineView from '@/components/HeadlineView'
 import { useDispatch, useSelector } from 'react-redux'
 import { addBookmark } from '@/store/slices/bookmarksSlice'
-import { CircleDashed } from 'lucide-react'
 
 function Collections() {
    const dispatch = useDispatch()
@@ -43,6 +44,44 @@ function Collections() {
    const [cardView, setCardView] = useState(false)
    const [headlineView, setHeadlineView] = useState(false)
    const [loading, setLoading] = useState(false)
+
+   const [sortDropdown, setSortDropdown] = useState(false)
+   const [sortOption, setSortOption] = useState('Newest')
+   const [search, setSearch] = useState('')
+
+   const getSortedBookmarks = () => {
+      let filtered = bookmarks
+      if (search.trim()) {
+         filtered = filtered.filter(
+            (b) =>
+               b.title &&
+               b.title.toLowerCase().includes(search.trim().toLowerCase())
+         )
+      }
+      let sorted = [...filtered]
+      switch (sortOption) {
+         case 'Newest':
+            sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            break
+         case 'Oldest':
+            sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            break
+         case 'A-Z':
+            sorted.sort((a, b) => a.title.localeCompare(b.title))
+            break
+         case 'Z-A':
+            sorted.sort((a, b) => b.title.localeCompare(a.title))
+            break
+         case 'Favorites':
+            sorted.sort((a, b) =>
+               b.favorite === a.favorite ? 0 : b.favorite ? 1 : -1
+            )
+            break
+         default:
+            break
+      }
+      return sorted
+   }
 
    const handleUrlSubmit = async (e) => {
       e.preventDefault()
@@ -145,7 +184,7 @@ function Collections() {
 
    return (
       <>
-         <div className="bg-[url('/2.png')] bg-cover bg-center h-full w-full">
+         <div className="bg-[url('/3.jpg')] bg-cover bg-center h-full w-full">
             {/* //? Navbar  */}
             <Navbar QR={QR} setQR={setQR} />
 
@@ -273,12 +312,14 @@ function Collections() {
                         <input
                            placeholder='Search Bookmark'
                            className='py-2 px-3 rounded-md bg-gray-800 border-cyan-300 border w-full text-sm focus:outline-none focus:ring focus:ring-cyan-400'
+                           value={search}
+                           onChange={(e) => setSearch(e.target.value)}
                         />
                         {/* //~ Filter Dropdown */}
                         <div className='relative' ref={dropdownRef}>
                            <button
                               onClick={() => setShowDropdown(!showDropdown)}
-                              className={`transition-all duration-500 cursor-pointer`}
+                              className={`transition-all duration-500 cursor-pointer ml-1`}
                            >
                               <Funnel
                                  className={`size-5 transition-transform duration-200 text-cyan-300 hover:text-cyan-600  ${
@@ -308,6 +349,38 @@ function Collections() {
                                        Tool
                                     </span>
                                  </button>
+                              </div>
+                           )}
+                        </div>
+                        {/* //~ Sort Dropdown */}
+                        <div className='relative'>
+                           <button
+                              onClick={() => setSortDropdown(!sortDropdown)}
+                              className='transition-all duration-500 cursor-pointer ml-1'
+                              title='Sort bookmarks'
+                           >
+                              <SortAsc className='size-5 text-cyan-300 hover:text-cyan-600' />
+                           </button>
+                           {sortDropdown && (
+                              <div className='absolute right-0 top-8 mt-2 w-24 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 transform opacity-100 scale-100 transition-all duration-200 origin-top-right'>
+                                 {['Newest', 'Oldest', 'A-Z', 'Z-A'].map(
+                                    (option) => (
+                                       <button
+                                          key={option}
+                                          className={`w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-center gap-3 transition-colors duration-150 ${
+                                             sortOption === option
+                                                ? 'bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300 font-semibold'
+                                                : 'text-gray-700 dark:text-gray-300'
+                                          }`}
+                                          onClick={() => {
+                                             setSortOption(option)
+                                             setSortDropdown(false)
+                                          }}
+                                       >
+                                          {option}
+                                       </button>
+                                    )
+                                 )}
                               </div>
                            )}
                         </div>
@@ -358,7 +431,13 @@ function Collections() {
                      >
                         <button
                            type='button'
-                           className='px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-cyan-700 focus:z-10 focus:ring-2 focus:ring-cyan-700 focus:text-cyan-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-cyan-500 dark:focus:text-white cursor-pointer'
+                           className={`px-4 py-2 text-sm font-medium border border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150
+                              rounded-s-lg
+                              ${
+                                 listView
+                                    ? 'bg-cyan-600 text-white shadow font-bold scale-105'
+                                    : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
+                              }`}
                            onClick={() => {
                               setListView(true)
                               setCardView(false)
@@ -371,7 +450,12 @@ function Collections() {
                         </button>
                         <button
                            type='button'
-                           className='px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-cyan-700 focus:z-10 focus:ring-2 focus:ring-cyan-700 focus:text-cyan-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-cyan-500 dark:focus:text-white cursor-pointer '
+                           className={`px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150
+                              ${
+                                 cardView
+                                    ? 'bg-cyan-600 text-white shadow font-bold scale-105'
+                                    : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
+                              }`}
                            onClick={() => {
                               setCardView(true)
                               setListView(false)
@@ -384,7 +468,13 @@ function Collections() {
                         </button>
                         <button
                            type='button'
-                           className='px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-cyan-700 focus:z-10 focus:ring-2 focus:ring-cyan-700 focus:text-cyan-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-cyan-500 dark:focus:text-white cursor-pointer'
+                           className={`px-4 py-2 text-sm font-medium border border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150
+                              rounded-e-lg
+                              ${
+                                 headlineView
+                                    ? 'bg-cyan-600 text-white shadow font-bold scale-105'
+                                    : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
+                              }`}
                            onClick={() => {
                               setHeadlineView(true)
                               setCardView(false)
@@ -502,13 +592,13 @@ function Collections() {
                            </div>
                         )}
                         {listView && !loading && (
-                           <ListView bookmarks={bookmarks} />
+                           <ListView bookmarks={getSortedBookmarks()} />
                         )}
                         {cardView && !loading && (
-                           <GridView bookmarks={bookmarks} />
+                           <GridView bookmarks={getSortedBookmarks()} />
                         )}
                         {headlineView && !loading && (
-                           <HeadlineView bookmarks={bookmarks} />
+                           <HeadlineView bookmarks={getSortedBookmarks()} />
                         )}
                      </div>
                   </div>

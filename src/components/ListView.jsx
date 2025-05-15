@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import {
    InfoIcon,
@@ -10,11 +10,8 @@ import {
    Info,
 } from 'lucide-react'
 
-function ListView() {
+function ListView({ bookmarks }) {
    const dispatch = useDispatch()
-   const bookmarks = useSelector((state) =>
-      Array.isArray(state.bookmarks?.bookmarks) ? state.bookmarks.bookmarks : []
-   )
 
    const handleDelete = (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {

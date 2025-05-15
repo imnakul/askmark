@@ -7,7 +7,9 @@ export default function App({ Component, pageProps }) {
    return (
       <Provider store={store}>
          <PersistGate loading={null} persistor={persistor}>
-            <Component {...pageProps} />
+            <div className='font-[Space Grotesk]'>
+               <Component {...pageProps} />
+            </div>
          </PersistGate>
       </Provider>
    )
