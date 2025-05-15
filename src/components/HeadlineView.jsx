@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import {
    Star,
    Pencil,
@@ -8,158 +9,91 @@ import {
 } from 'lucide-react'
 
 function HeadlineView() {
+   const dispatch = useDispatch()
+   const bookmarks = useSelector((state) =>
+      Array.isArray(state.bookmarks?.bookmarks) ? state.bookmarks.bookmarks : []
+   )
+
+   const handleDelete = (id) => {
+      if (window.confirm('Are you sure you want to delete this bookmark?')) {
+         dispatch(removeBookmark(id))
+      }
+   }
+
    return (
-      <>
-         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 gap-4 h-[70vh] overflow-y-auto pr-4'>
-            {projects.map((project) => (
-               <div className='card relative bg-black/30 border border-teal-400 w-full shadow-sm h-14 rounded-md hover:translate-y-1.5 transition duration-200'>
-                  <div className='w-full h-full flex items-center justify-start px-4'>
-                     <div className='w-4/5 flex items-center gap-2'>
-                        <button
-                           className=' hover:opacity-70 cursor-pointer'
-                           title='Ask a question'
-                        >
-                           <MessageCircleQuestion className='size-6 text-cyan-300 hover:animate-spin' />
-                        </button>
-                        <p className='text-cyan-100 font-semibold '>
-                           {project.title}
-                        </p>
-                        <p>|</p>
-                        <p>04-05-2025</p>
-                        <p>|</p>
-                        <div className='badge badge-outline badge-sm'>
-                           Fashion
-                        </div>
-                     </div>
-
-                     <div className='flex items-center w-1/3 gap-4 justify-between '>
-                        <button
-                           className=' hover:opacity-70 cursor-pointer'
-                           title='Edit'
-                        >
-                           <Pencil className='size-5 text-green-400 p-0.5' />
-                        </button>
-                        <button
-                           className=' hover:opacity-70 cursor-pointer'
-                           title='Delete'
-                        >
-                           <Trash className='size-5 text-red-400 p-0.5' />
-                        </button>
-                        <button className=' hover:opacity-70 cursor-pointer'>
-                           <Star className='size-5 text-teal-400 p-0.5' />
-                        </button>
-
-                        <button
-                           className=' hover:opacity-70 cursor-pointer'
-                           title='Open'
-                        >
-                           <ExternalLink className='size-5 text-blue-400 p-0.5' />
-                        </button>
-                     </div>
+      <div className='flex flex-col gap-4 h-[70vh] overflow-y-auto custom-scrollbar p-2'>
+         {bookmarks.map((bookmark) => (
+            <div
+               key={bookmark.id}
+               className='flex flex-col md:flex-row items-start md:items-center justify-between bg-gradient-to-r from-black/70 via-gray-900/70 to-cyan-900/60 border border-cyan-400 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 px-4 py-3 group card'
+            >
+               {/* //~ Bookmark Content */}
+               <div className='flex items-center gap-4 w-full md:w-4/5'>
+                  <img
+                     src={bookmark.thumbnail || '/favicon.ico'}
+                     alt='favicon'
+                     className='w-8 h-8 rounded-full border-2 border-white shadow bg-white object-contain'
+                     onError={(e) => (e.currentTarget.src = '/favicon.ico')}
+                  />
+                  <div className='flex-1 min-w-0'>
+                     <h2
+                        className='text-base font-bold text-white truncate'
+                        title={bookmark.title}
+                     >
+                        {bookmark.title}
+                     </h2>
+                     <p className='text-xs text-gray-300 line-clamp-2 min-h-[2em]'>
+                        {bookmark.description || 'No description.'}
+                     </p>
                   </div>
+                  <span
+                     className='ml-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-cyan-700/80 text-white truncate 
+                  max-w-[150px]'
+                  >
+                     {bookmark.category || 'Uncategorized'}
+                  </span>
                </div>
-            ))}
-         </div>
-      </>
+               {/* //~Bookmark Actions  */}
+               <div className='flex gap-2 mt-2 md:mt-0 md:w-1/5 justify-end'>
+                  <button
+                     className='p-1.5 rounded-full bg-green-700/80 hover:bg-green-600 transition'
+                     title='Edit'
+                  >
+                     <Pencil className='size-5 text-white' />
+                  </button>
+                  <button
+                     className='p-1.5 rounded-full bg-red-700/80 hover:bg-red-600 transition'
+                     title='Delete'
+                     onClick={() => handleDelete(bookmark.id)}
+                  >
+                     <Trash className='size-5 text-white' />
+                  </button>
+                  {/* <button
+                     className='p-1.5 rounded-full bg-yellow-600/80 hover:bg-yellow-500 transition'
+                     title='Favorite'
+                  >
+                     <Star className='size-5 text-white' />
+                  </button> */}
+                  <button
+                     className='p-1.5 rounded-full bg-cyan-700/80 hover:bg-cyan-600 transition'
+                     title='Ask'
+                  >
+                     <MessageCircleQuestion className='size-5 text-white' />
+                  </button>
+                  <a
+                     href={bookmark.link}
+                     target='_blank'
+                     rel='noopener noreferrer'
+                     className='p-1.5 rounded-full bg-blue-700/80 hover:bg-blue-600 transition'
+                     title='Open'
+                  >
+                     <ExternalLink className='size-5 text-white' />
+                  </a>
+               </div>
+            </div>
+         ))}
+      </div>
    )
 }
-export default HeadlineView
 
-export const projects = [
-   {
-      title: 'Stripe',
-      description:
-         'A technology company that builds economic infrastructure for the internet.',
-      link: 'https://stripe.com',
-   },
-   {
-      title: 'Netflix',
-      description:
-         'A streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.',
-      link: 'https://netflix.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-   {
-      title: 'Amazon',
-      description:
-         'A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.',
-      link: 'https://amazon.com',
-   },
-   {
-      title: 'Microsoft',
-      description:
-         'A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.',
-      link: 'https://microsoft.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-   {
-      title: 'Amazon',
-      description:
-         'A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.',
-      link: 'https://amazon.com',
-   },
-   {
-      title: 'Microsoft',
-      description:
-         'A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.',
-      link: 'https://microsoft.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-   {
-      title: 'Amazon',
-      description:
-         'A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.',
-      link: 'https://amazon.com',
-   },
-   {
-      title: 'Microsoft',
-      description:
-         'A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.',
-      link: 'https://microsoft.com',
-   },
-   {
-      title: 'Google',
-      description:
-         'A multinational technology company that specializes in Internet-related services and products.',
-      link: 'https://google.com',
-   },
-   {
-      title: 'Meta',
-      description:
-         "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: 'https://meta.com',
-   },
-]
+export default HeadlineView

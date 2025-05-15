@@ -72,12 +72,12 @@ function ListView() {
                         >
                            <Trash className='size-5 text-white' />
                         </button>
-                        <button
+                        {/* <button
                            className='p-1.5 rounded-full bg-yellow-600/80 hover:bg-yellow-500 transition'
                            title='Favorite'
                         >
                            <Star className='size-5 text-white' />
-                        </button>
+                        </button> */}
                         <button
                            className='p-1.5 rounded-full bg-cyan-700/80 hover:bg-cyan-600 transition'
                            title='Ask'
