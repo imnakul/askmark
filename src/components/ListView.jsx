@@ -11,7 +11,9 @@ import {
 
 function ListView() {
    const dispatch = useDispatch()
-   const bookmarks = useSelector((state) => state.bookmarks.bookmarks)
+   const bookmarks = useSelector((state) =>
+      Array.isArray(state.bookmarks?.bookmarks) ? state.bookmarks.bookmarks : []
+   )
 
    const handleDelete = (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {
