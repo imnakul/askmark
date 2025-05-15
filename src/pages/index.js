@@ -1,12 +1,11 @@
-// import { Collections } from '@/pages/collections'
-// import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams'
 import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight'
 import { SmoothCursor } from '@/components/ui/smooth-cursor'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/moving-border'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
-function index() {
+function Index() {
    const router = useRouter()
    return (
       <>
@@ -32,7 +31,7 @@ function index() {
                Not just saved links.{'  '}
                <br></br>
                <Highlight className='text-black dark:text-white'>
-                  "Smart Bookmarks That Talk Back."
+                  &quot;Smart Bookmarks That Talk Back.&quot;
                </Highlight>
                {/* <br></br> */}
                <span className='text-2xl'>
@@ -56,9 +55,13 @@ function index() {
                target='_blank'
                className='fixed bottom-10 right-10'
             >
-               <img
+               <Image
                   src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnplZnJ5ZWZmc3ZlaWg2bGU5eGZ0N2JzMDVoczk3bnNqMjJ0MXd6NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TDQOtnWgsBx99cNoyH/giphy.gif'
+                  width={64}
+                  height={64}
+                  alt='Buy me a coffee QR code'
                   className='size-16 cursor-pointer'
+                  priority
                />
             </a>
          </HeroHighlight>
@@ -66,4 +69,4 @@ function index() {
       </>
    )
 }
-export default index
+export default Index

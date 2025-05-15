@@ -30,29 +30,31 @@ function GridView({ bookmarks }) {
          {bookmarks.map((bookmark) => (
             <div
                key={bookmark.id}
-               className='relative bg-gradient-to-br from-cyan-900/60 via-gray-900/70 to-black/60 border border-cyan-400 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group flex flex-col h-64 overflow-hidden card'
+               className='relative bg-gradient-to-br from-cyan-900/60 via-gray-900/70 to-black/60 border border-cyan-400/40 rounded-3xl shadow-xl hover:shadow-2xl hover:border-cyan-300/80 transition-all duration-300 group flex flex-col h-72 overflow-hidden card'
             >
-               <div className='flex-1 flex flex-col items-center justify-center p-4'>
+               <div className='flex flex-col items-center justify-center p-4 '>
                   <img
                      src={bookmark.thumbnail || '/favicon.ico'}
                      alt='favicon'
-                     className='w-14 h-14 rounded-full border-2 border-white shadow bg-white object-contain mb-2'
+                     className='w-16 h-16 rounded-full border-2 border-white shadow bg-white object-contain mb-3'
                      onError={(e) => (e.currentTarget.src = '/favicon.ico')}
                   />
                   <h2
-                     className='text-base font-bold text-white text-center truncate w-full'
+                     className='text-lg font-bold text-white text-center truncate w-full mb-1'
                      title={bookmark.title}
                   >
                      {bookmark.title}
                   </h2>
-                  <span className='mt-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-cyan-700/80 text-white truncate max-w-[120px]'>
+                  <span className='mt-1 mb-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-700/90 text-white truncate max-w-[140px] shadow-md'>
                      {bookmark.category || 'Uncategorized'}
                   </span>
-                  <p className='text-xs text-gray-300 line-clamp-3 text-center mt-2 min-h-[3em]'>
+                  <p className='text-xs text-gray-300 line-clamp-3 text-center min-h-[3em]'>
                      {bookmark.description || 'No description.'}
                   </p>
                </div>
-               <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-3 py-1 flex items-center justify-between gap-2'>
+
+               {/* //?? Action buttons  */}
+               <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent px-4 py-2 flex items-center justify-between gap-2 border-t border-cyan-400/20 backdrop-blur-md mb-1'>
                   <div className='flex gap-2'>
                      <button
                         className='group bg-white/10 border border-cyan-300/30 shadow-md hover:bg-cyan-400/30 hover:border-cyan-300/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 min-w-0'
