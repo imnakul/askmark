@@ -94,54 +94,54 @@
 //    }
 // }
 
-// async function categorizePage({ title, metaDescription, keywords, tags }) {
-//    const llm = new ChatGoogleGenerativeAI({
-//       model: 'gemini-2.0-flash',
-//       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
-//       temperature: 0,
-//    })
-//    try {
-//       const systemPrompt = `
-// You are a smart assistant that helps classify web pages into categories based on their metadata.
-// Given the title, description, keywords, and tags of a web page, analyze the intent and purpose of the page.
+async function categorizePage({ title, metaDescription, keywords, tags }) {
+   const llm = new ChatGoogleGenerativeAI({
+      model: 'gemini-2.0-flash',
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+      temperature: 0,
+   })
+   try {
+      const systemPrompt = `
+You are a smart assistant that helps classify web pages into categories based on their metadata.
+Given the title, description, keywords, and tags of a web page, analyze the intent and purpose of the page.
 
-// Return one of the following categories as your response, and nothing else:
-// 1. Social Media Platform
-// 2. Tools
-// 3. Landing Page
-// 4. Article / Documentation
-// 5. Videos
-// 6. Images
-// 7. Search Engine
+Return one of the following categories as your response, and nothing else:
+1. Social Media Platform
+2. Tools
+3. Landing Page
+4. Article / Documentation
+5. Videos
+6. Images
+7. Search Engine
 
-// Be concise and objective. Respond with only the category name.
+Be concise and objective. Respond with only the category name.
 
-// Example:
-// Title: Google Search
-// Description : N/A
+Example:
+Title: Google Search
+Description : N/A
 
-// Response: Search Engine
-// `
+Response: Search Engine
+`
 
-//       const userPrompt = `
-// Title: ${title}
-// Description: ${metaDescription}
-// Keywords: ${keywords?.join(', ') || 'N/A'}
-// Tags: ${tags?.join(', ') || 'N/A'}
-// `
+      const userPrompt = `
+Title: ${title}
+Description: ${metaDescription}
+Keywords: ${keywords?.join(', ') || 'N/A'}
+Tags: ${tags?.join(', ') || 'N/A'}
+`
 
-//       const response = await llm.invoke([
-//          { role: 'system', content: systemPrompt },
-//          { role: 'user', content: userPrompt },
-//       ])
+      const response = await llm.invoke([
+         { role: 'system', content: systemPrompt },
+         { role: 'user', content: userPrompt },
+      ])
 
-//       console.log(`📂 Suggested Category: ${response.content}`)
-//       return response.content
-//    } catch (err) {
-//       console.error('❌ Error invoking Gemini:', err.message)
-//       return null
-//    }
-// }
+      console.log(`📂 Suggested Category: ${response.content}`)
+      return response.content
+   } catch (err) {
+      console.error('❌ Error invoking Gemini:', err.message)
+      return null
+   }
+}
 
 import { CheerioWebBaseLoader } from '@langchain/community/document_loaders/web/cheerio'
 // import readline from 'node:readline/promises'
@@ -200,12 +200,12 @@ export async function webExtractor(web_url) {
          .map((_, el) => $(el).text().trim())
          .get()
 
-      // const category = await categorizePage({
-      //    title,
-      //    metaDescription,
-      //    keywords,
-      //    tags,
-      // })
+      const category = await categorizePage({
+         title,
+         metaDescription,
+         keywords,
+         tags,
+      })
 
       const hasArticleTag = $('article').length > 0
       const hasVideoTag = $('video').length > 0
@@ -232,7 +232,7 @@ export async function webExtractor(web_url) {
          hasArticleTag,
          hasVideoTag,
          hasCanvasTag,
-         // category,
+         category,
       }
    } catch (error) {
       console.error('❌ webExtractor error:', error.message)

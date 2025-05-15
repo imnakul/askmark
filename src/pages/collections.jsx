@@ -70,6 +70,7 @@ function Collections() {
                   thumbnail: json.data.favicon || '',
                   tags: [], // Can be updated later
                   createdAt: new Date().toISOString(),
+                  category: json.data.category,
                })
             )
 

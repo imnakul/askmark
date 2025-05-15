@@ -23,68 +23,77 @@ function ListView() {
 
    return (
       <>
-         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 h-[70vh] overflow-y-auto space-y-2 p-2'>
+         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 h-[70vh] overflow-y-auto custom-scrollbar p-2'>
             {bookmarks.map((bookmark) => (
                <div
                   key={bookmark.id}
-                  className={`card w-88 md:w-60 lg:w-78 relative bg-black/30 border border-teal-400 card-md shadow-sm rounded-md transition duration-200 hover:scale-105 h-44 `}
+                  className='relative bg-gradient-to-br from-black/60 via-gray-900/70 to-cyan-900/60 border border-cyan-400 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group flex flex-col h-52 overflow-hidden card'
                >
-                  <div className='card-body px-3 py-3'>
-                     <div className='flex items-center justify-start gap-3'>
-                        <img
-                           type='icon'
-                           src={bookmark.thumbnail}
-                           alt='favicon'
-                           className='size-8'
-                        />
-                        <h2 className='card-title w-56 text-sm '>
-                           {bookmark.title}
-                        </h2>
-                     </div>
-                     {/* <div className='absolute top-3 right-3'>
+                  {/* Favicon and Category */}
+                  <div className='flex items-center justify-between px-4 pt-4'>
+                     <img
+                        src={bookmark.thumbnail || '/favicon.ico'}
+                        alt='favicon'
+                        className='w-10 h-10 rounded-full border-2 border-white shadow-md bg-white object-contain'
+                        onError={(e) => (e.currentTarget.src = '/favicon.ico')}
+                     />
+                     <span
+                        className='px-3 py-1 rounded-full text-xs font-semibold bg-cyan-700/80 text-white ml-2 truncate 
+                     max-w-[150px]'
+                     >
+                        {bookmark.category || 'Uncategorized'}
+                     </span>
+                  </div>
+                  {/* Title */}
+                  <div className='flex-1 flex flex-col justify-top px-4 my-4'>
+                     <h2
+                        className='text-lg font-bold text-white truncate mb-1'
+                        title={bookmark.title}
+                     >
+                        {bookmark.title}
+                     </h2>
+                     <p className='text-xs text-gray-300 line-clamp-2 mb-2 min-h-[2.5em]'>
+                        {bookmark.description || 'No description.'}
+                     </p>
+                  </div>
+                  {/* Action Buttons */}
+                  <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 py-2 flex items-center justify-between gap-2 pb-4'>
+                     <div className='flex gap-2'>
                         <button
-                           title='Ask a question'
-                           className='cursor-pointer'
+                           className='p-1.5 rounded-full bg-green-700/80 hover:bg-green-600 transition'
+                           title='Edit'
                         >
-                           <MessageCircleQuestion className='size-7 text-cyan-300 hover:animate-spin' />
+                           <Pencil className='size-5 text-white' />
                         </button>
-                     </div> */}
-                     <p className='text-xs h-10 py-1'>{bookmark.description}</p>
-                     <div className='flex items-center justify-between mt-2'>
-                        <div className='badge badge-outline badge-sm '>
-                           {bookmark.tags?.join(', ') || 'No tags'}
-                        </div>
-                        <div className='justify-end card-actions w-full gap-1'>
-                           <button
-                              className='btn btn-sm hover:opacity-70 cursor-pointer'
-                              title='Edit'
-                           >
-                              <Pencil className='size-5 text-green-400 p-0.5' />
-                           </button>
-                           <button
-                              className='btn btn-sm hover:opacity-70 cursor-pointer'
-                              title='Delete'
-                              onClick={() => handleDelete(bookmark.id)}
-                           >
-                              <Trash className='size-5 text-red-400 p-0.5' />
-                           </button>
-                           <button
-                              className='btn btn-sm hover:opacity-70 cursor-pointer'
-                              title='Favorite'
-                           >
-                              <Star className='size-5 text-teal-400 p-0.5' />
-                           </button>
-                           <a
-                              href={bookmark.link}
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              className='btn btn-sm hover:opacity-70 cursor-pointer'
-                              title='Open'
-                           >
-                              <ExternalLink className='size-5 text-blue-400 p-0.5' />
-                           </a>
-                        </div>
+                        <button
+                           className='p-1.5 rounded-full bg-red-700/80 hover:bg-red-600 transition'
+                           title='Delete'
+                           onClick={() => handleDelete(bookmark.id)}
+                        >
+                           <Trash className='size-5 text-white' />
+                        </button>
+                        <button
+                           className='p-1.5 rounded-full bg-yellow-600/80 hover:bg-yellow-500 transition'
+                           title='Favorite'
+                        >
+                           <Star className='size-5 text-white' />
+                        </button>
+                        <button
+                           className='p-1.5 rounded-full bg-cyan-700/80 hover:bg-cyan-600 transition'
+                           title='Ask'
+                        >
+                           <MessageCircleQuestion className='size-5 text-white' />
+                        </button>
                      </div>
+                     <a
+                        href={bookmark.link}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='p-1.5 rounded-full bg-blue-700/80 hover:bg-blue-600 transition'
+                        title='Open'
+                     >
+                        <ExternalLink className='size-5 text-white' />
+                     </a>
                   </div>
                </div>
             ))}
