@@ -1,13 +1,11 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import {
    InfoIcon,
-   Pencil,
    ExternalLink,
    MessageCircleQuestion,
    Trash,
-   Info,
 } from 'lucide-react'
 
 function ListView({ handleShowModal, bookmarks }) {

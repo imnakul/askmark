@@ -1,14 +1,13 @@
 import { useDispatch } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import {
-   Star,
-   Pencil,
+   InfoIcon,
    ExternalLink,
    MessageCircleQuestion,
    Trash,
 } from 'lucide-react'
 
-function GridView({ bookmarks }) {
+function GridView({ handleShowModal, bookmarks }) {
    const dispatch = useDispatch()
 
    const handleDelete = (id) => {
@@ -54,13 +53,14 @@ function GridView({ bookmarks }) {
                </div>
 
                {/* //?? Action buttons  */}
-               <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent px-4 py-2 flex items-center justify-between gap-2 border-t border-cyan-400/20 backdrop-blur-md mb-1'>
+               <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent px-4 py-2 flex items-center justify-between gap-2 border-t border-cyan-400/20 backdrop-blur-md my-2'>
                   <div className='flex gap-2'>
                      <button
                         className='group bg-white/10 border border-cyan-300/30 shadow-md hover:bg-cyan-400/30 hover:border-cyan-300/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 min-w-0'
-                        title='Edit'
+                        title='More Info'
+                        onClick={() => handleShowModal(bookmark)}
                      >
-                        <Pencil className='size-4 text-cyan-200 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]' />
+                        <InfoIcon className='size-4 text-cyan-200 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]' />
                      </button>
                      <button
                         className='group bg-white/10 border border-red-300/30 shadow-md hover:bg-red-500/30 hover:border-red-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-red-200/30 hover:ring-red-300/50 focus:outline-none focus:ring-2 focus:ring-red-400/60 min-w-0'

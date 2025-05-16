@@ -17,7 +17,7 @@ export function Footer() {
 
    return (
       <>
-         <footer className='bg-white rounded-lg shadow-sm dark:bg-black/20 mt-4 mx-4 '>
+         <footer className='bg-gradient-to-r from-black/20 to-white/10 rounded-lg shadow-sm  mt-4 mx-4 '>
             <div className='w-full max-w-7xl mx-auto px-4 py-1 '>
                <div className='sm:flex sm:items-center sm:justify-between'>
                   <button
@@ -27,7 +27,7 @@ export function Footer() {
                      className='flex items-center mb-6 sm:mb-0 space-x-1 rtl:space-x-reverse'
                   >
                      <img
-                        src='/logo.jpg'
+                        src='/logo4.png'
                         className='size-12'
                         alt='Askmark logo'
                      />

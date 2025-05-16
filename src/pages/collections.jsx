@@ -523,10 +523,16 @@ function Collections() {
                            />
                         )}
                         {cardView && !loading && (
-                           <GridView bookmarks={getSortedBookmarks()} />
+                           <GridView
+                              handleShowModal={handleShowModal}
+                              bookmarks={getSortedBookmarks()}
+                           />
                         )}
                         {headlineView && !loading && (
-                           <HeadlineView bookmarks={getSortedBookmarks()} />
+                           <HeadlineView
+                              handleShowModal={handleShowModal}
+                              bookmarks={getSortedBookmarks()}
+                           />
                         )}
                      </div>
                   </div>
