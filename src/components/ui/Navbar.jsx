@@ -6,7 +6,11 @@ function Navbar({ QR, setQR }) {
    return (
       <div className='navbar bg-white/10 shadow-sm max-w-7xl w-full mx-auto rounded-md flex items-center justify-between'>
          <div className='flex items-center gap-0 cursor-pointer'>
-            <img src='/logo.jpg' alt='logo' className='size-12' />
+            <img
+               src='/logo3.jpg'
+               alt='logo'
+               className='size-12 rounded-lg border-2 border-cyan-400'
+            />
             <span
                className='font-bold text-black dark:text-white text-xl '
                onClick={() => {
