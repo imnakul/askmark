@@ -16,14 +16,13 @@ import { useScroll, useMotionValueEvent } from 'motion/react'
 import Modal from '@/components/ui/modal'
 import { webExtractor } from '@/functions/webExtractor.mjs'
 import Navbar from '@/components/ui/Navbar'
-import ListView from '@/components/ListView'
-import GridView from '@/components/GridView'
-import HeadlineView from '@/components/HeadlineView'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { addBookmark } from '@/store/slices/bookmarksSlice'
 import CurrentBookmark from '@/components/CurrentBookmark'
 import { db } from '@/lib/firebase'
 import { collection, setDoc, doc } from 'firebase/firestore'
+import MainContainer from '@/components/MainContainer'
 
 function Collections() {
    const dispatch = useDispatch()
@@ -183,30 +182,30 @@ function Collections() {
    }
 
    // Firestore sync: push bookmarks to Firestore on every change
-   useEffect(() => {
-      if (!bookmarks || bookmarks.length === 0) return
-      const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
-         ? JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)
-              .user?.uid
-         : null
-      if (!userId) return
-      const pushToFirestore = async () => {
-         try {
-            // Store all bookmarks under users/{userId}/bookmarks/{bookmarkId}
-            const batch = bookmarks.map(async (bm) => {
-               const safeId = encodeURIComponent(bm.link)
-               await setDoc(doc(db, 'users', userId, 'bookmarks', safeId), bm, {
-                  merge: true,
-               })
-            })
-            await Promise.all(batch)
-         } catch (err) {
-            // Optionally handle error
-            console.error('Error syncing bookmarks to Firestore:', err)
-         }
-      }
-      pushToFirestore()
-   }, [bookmarks])
+   // useEffect(() => {
+   //    if (!bookmarks || bookmarks.length === 0) return
+   //    const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
+   //       ? JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)
+   //            .user?.uid
+   //       : null
+   //    if (!userId) return
+   //    const pushToFirestore = async () => {
+   //       try {
+   //          // Store all bookmarks under users/{userId}/bookmarks/{bookmarkId}
+   //          const batch = bookmarks.map(async (bm) => {
+   //             const safeId = encodeURIComponent(bm.link)
+   //             await setDoc(doc(db, 'users', userId, 'bookmarks', safeId), bm, {
+   //                merge: true,
+   //             })
+   //          })
+   //          await Promise.all(batch)
+   //       } catch (err) {
+   //          // Optionally handle error
+   //          console.error('Error syncing bookmarks to Firestore:', err)
+   //       }
+   //    }
+   //    pushToFirestore()
+   // }, [bookmarks])
 
    return (
       <>
@@ -242,11 +241,11 @@ function Collections() {
                   <Modal
                      showModal={showbookmarkModal}
                      setShowModal={setShowBookmarkModal}
-                     header={
-                        currentBookmark?.title
-                           ? `Bookmark Details`
-                           : 'Add New Bookmark'
-                     }
+                     // header={
+                     //    currentBookmark?.title
+                     //       ? `Bookmark Details`
+                     //       : 'Add New Bookmark'
+                     // }
                      modalContainerClass='bg-gradient-to-tr from-black/70 via-blue-700/30 to-black/70 w-[99vw] sm:w-full sm:max-w-6xl rounded-2xl shadow-2xl'
                      closeModalOutsideClick={() => setShowBookmarkModal(false)}
                   >
@@ -258,7 +257,7 @@ function Collections() {
 
                {/* //? MAIN CONTAINER  */}
                <div className='w-full bg-white/5 flex flex-col items-center justify-end p-2 gap-2 '>
-                  {/* //?? TOPBAR  */}
+                  {/* //?? Main Bookmark Containter  */}
                   <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between w-full h-auto min-h-16 gap-2 px-2 sm:px-4 py-2 bg-white/5 rounded-md shadow-sm'>
                      <div className='flex items-center gap-2 w-full sm:w-1/5'>
                         {/* //~Search  */}
@@ -440,130 +439,15 @@ function Collections() {
                         </button>
                      </div>
                   </div>
-                  {/* //~ Sidebar  */}
-                  <div className='flex items-center justify-center w-full h-[58vh] md:h-[76vh] lg:h-[73vh] gap-2 '>
-                     {/* <div className='hidden lg:block w-1/6 h-full items-center border border-teal-400 p-4 bg-white/10 rounded-md'>
-                        Collections
-                        <ul className='mt-2 border-pink-300 border w-full h-[90%] overflow-y-hidden space-y-2 p-2 rounded-md'>
-                           <li>Collection 1</li>
-                           <li>Collection 2</li>
-                           <li>Collection 2</li>
-                           <li>Collection 2</li>
-                           <li>Collection 2</li>
-                           <li>Collection 2</li>
-                        </ul>
-                     </div> */}
-                     <div className='hidden lg:block w-1/6 h-full items-center border border-teal-400 p-4 bg-white/10 rounded-md overflow-y-auto border-r text-sm space-y-6'>
-                        {/* Section: General */}
-                        <div className='space-y-2 '>
-                           <div className='text-gray-300 cursor-pointer text-base'>
-                              All bookmarks
-                           </div>
-                           <div className='text-gray-300 ml-4 cursor-pointer'>
-                              Unsorted
-                           </div>
-                           <div className='text-gray-300 ml-4 cursor-pointer'>
-                              Trash
-                           </div>
-                        </div>
-
-                        {/* Section: Collections */}
-                        <div>
-                           <div className='flex justify-between items-center uppercase text-xs text-gray-400 mb-2'>
-                              <span>Collections</span>
-                              <button className='text-teal-500 hover:text-teal-700 text-base leading-none'>
-                                 ＋
-                              </button>
-                           </div>
-                           <ul className='space-y-2'>
-                              {/* Dropdown: Design Inspiration */}
-                              {folders.map((folder) => (
-                                 <li className='flex items-center gap-2 '>
-                                    <span>{folder.icon}</span> {folder.title}
-                                    <span className='ml-auto text-gray-400'>
-                                       {folder.count}
-                                    </span>
-                                 </li>
-                              ))}
-                              {/* <li>
-                                 <div
-                                    className='flex items-center gap-2  cursor-pointer'
-                                    onClick={() =>
-                                       toggleDropdown('Design Inspiration')
-                                    }
-                                 >
-                                    <span>🎨</span> Design Inspiration
-                                    <span className='ml-auto '>
-                                       {openDropdowns['Design Inspiration']
-                                          ? '−'
-                                          : '+'}
-                                    </span>
-                                 </div>
-                                 {openDropdowns['Design Inspiration'] && (
-                                    <ul className='ml-6 mt-1 space-y-1'>
-                                       <li className='text-gray-600'>
-                                          UI Ideas
-                                       </li>
-                                       <li className='text-gray-600'>
-                                          Color Schemes
-                                       </li>
-                                    </ul>
-                                 )}
-                              </li> */}
-                           </ul>
-                        </div>
-
-                        {/* Section: Filters */}
-                        <div>
-                           <div className='uppercase text-xs text-gray-400 mb-2'>
-                              Filters
-                           </div>
-                           <ul className='space-y-2'>
-                              {filters.map((filter) => {
-                                 return (
-                                    <li className='flex justify-between'>
-                                       <span>
-                                          {filter.icon} {filter.title}
-                                       </span>
-                                       <span className='text-gray-400'>
-                                          {filter.count}
-                                       </span>
-                                    </li>
-                                 )
-                              })}
-                           </ul>
-                        </div>
-                     </div>
-
-                     <div className='w-full lg:w-5/6 h-full items-center p-2  '>
-                        {loading && (
-                           <div className='flex flex-col items-center justify-center h-full px-4 sm:px-6 lg:px-8'>
-                              <CircleDashed className='text-cyan-400 font-bold text-4xl sm:text-5xl lg:text-6xl animate-spin mb-4' />
-                              <p className='text-xl sm:text-2xl font-semibold text-cyan-500 mb-4 text-center'>
-                                 Adding bookmark...
-                              </p>
-                           </div>
-                        )}
-                        {listView && !loading && (
-                           <ListView
-                              handleShowModal={handleShowModal}
-                              bookmarks={getSortedBookmarks()}
-                           />
-                        )}
-                        {cardView && !loading && (
-                           <GridView
-                              handleShowModal={handleShowModal}
-                              bookmarks={getSortedBookmarks()}
-                           />
-                        )}
-                        {headlineView && !loading && (
-                           <HeadlineView
-                              handleShowModal={handleShowModal}
-                              bookmarks={getSortedBookmarks()}
-                           />
-                        )}
-                     </div>
-                  </div>
+                  {/* //~ Main Container + Sidebar  */}
+                  <MainContainer
+                     handleShowModal={handleShowModal}
+                     sortedBookmarks={getSortedBookmarks()}
+                     loading={loading}
+                     listView={listView}
+                     cardView={cardView}
+                     headlineView={headlineView}
+                  />
                </div>
 
                {/* //? Footer */}
@@ -575,21 +459,3 @@ function Collections() {
 }
 
 export default Collections
-
-const folders = [
-   { title: 'Interior', icon: '🛋️', count: 11 },
-   { title: 'Interface', icon: '💎', count: 9 },
-   { title: 'Icons', icon: '📁', count: 5 },
-   { title: 'Apps', icon: '📱', count: 5 },
-   { title: 'Buy', icon: '🛒', count: 7 },
-   { title: 'Movies', icon: '🎬', count: 7 },
-   { title: 'Plan next trip', icon: '📝', count: 7 },
-]
-
-const filters = [
-   { title: '🖼️ Images', count: 14 },
-   { title: '📄 Articles', count: 12 },
-   { title: '🎥 Video', count: 4 },
-   { title: '❌ Broken', count: 2 },
-   { title: '🚫 Without tags', count: 51 },
-]

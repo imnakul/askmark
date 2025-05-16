@@ -17,27 +17,27 @@ function CurrentBookmark({ currentBookmark }) {
          return
       dispatch(removeBookmark(idOrLink))
       // Remove from Firestore as well
-      try {
-         const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
-            ? JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)
-                 .user?.uid
-            : null
-         if (!userId) return
-         // Try both id and link as doc id (for compatibility)
-         await deleteDoc(
-            doc(
-               db,
-               'users',
-               userId,
-               'bookmarks',
-               encodeURIComponent(currentBookmark.link)
-            )
-         )
-         // Optionally: await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(idOrLink)))
-      } catch (err) {
-         // Optionally handle error
-         console.error('Error deleting bookmark from Firestore:', err)
-      }
+      // try {
+      //    const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
+      //       ? JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)
+      //            .user?.uid
+      //       : null
+      //    if (!userId) return
+      //    // Try both id and link as doc id (for compatibility)
+      //    await deleteDoc(
+      //       doc(
+      //          db,
+      //          'users',
+      //          userId,
+      //          'bookmarks',
+      //          encodeURIComponent(currentBookmark.link)
+      //       )
+      //    )
+      //    // Optionally: await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(idOrLink)))
+      // } catch (err) {
+      //    // Optionally handle error
+      //    console.error('Error deleting bookmark from Firestore:', err)
+      // }
    }
 
    return (

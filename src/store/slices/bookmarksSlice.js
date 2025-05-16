@@ -35,7 +35,6 @@ const initialState = {
          tags: ['design', 'tool'],
          createdAt: '2024-01-03T14:00:00.000Z',
          category: 'Tool',
-         favorite: false,
       },
       {
          id: 1,
