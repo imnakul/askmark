@@ -219,7 +219,7 @@ function Collections() {
                            ? `Bookmark Details`
                            : 'Add New Bookmark'
                      }
-                     modalContainerClass='bg-gradient-to-tr from-black/60  via-blue-500/30 to-black/40 w-[99vw] sm:w-full sm:max-w-6xl rounded-2xl shadow-2xl'
+                     modalContainerClass='bg-gradient-to-tr from-black/70 via-blue-700/30 to-black/70 w-[99vw] sm:w-full sm:max-w-6xl rounded-2xl shadow-2xl'
                      closeModalOutsideClick={() => setShowBookmarkModal(false)}
                   >
                      {currentBookmark && (
@@ -229,7 +229,7 @@ function Collections() {
                )}
 
                {/* //? MAIN CONTAINER  */}
-               <div className='w-full bg-white/5 flex flex-col items-center justify-end p-2 gap-2'>
+               <div className='w-full bg-white/5 flex flex-col items-center justify-end p-2 gap-2 '>
                   {/* //?? TOPBAR  */}
                   <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between w-full h-auto min-h-16 gap-2 px-2 sm:px-4 py-2 bg-white/5 rounded-md shadow-sm'>
                      <div className='flex items-center gap-2 w-full sm:w-1/5'>

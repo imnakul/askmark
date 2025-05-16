@@ -52,25 +52,34 @@ function CurrentBookmark({ currentBookmark }) {
                </span>
             </div>
             {/* Details Section */}
-            <div className='w-full  gap-x-8 gap-y-3 text-base bg-black/30 px-4 py-2 rounded-lg flex items0-center justify-between'>
+            <div className='w-full gap-x-8 gap-y-3 text-base bg-black/30 px-4 py-2 rounded-lg flex flex-wrap items-center justify-between'>
                {/* Link */}
                {currentBookmark.link && (
-                  <div className='flex items-center gap-4 justify-start md:items-start'>
-                     <button
-                        className='group bg-white/10 border border-cyan-200/30 shadow-md hover:bg-cyan-600/30 hover:border-cyan-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 min-w-0'
-                        title='Ask'
-                     >
-                        <Copy className='size-4 text-cyan-300 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]' />
-                     </button>
+                  <div className='flex items-center gap-2 '>
                      <a
                         href={currentBookmark.link}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='text-cyan-200 underline break-all text-center md:text-left font-medium hover:text-cyan-400 transition-all'
+                        className='flex items-center gap-2 bg-cyan-900/60 hover:bg-cyan-800/80 border border-cyan-400/30 px-3 py-1 rounded-full text-cyan-200 font-medium shadow transition-all duration-150 max-w-[220px] truncate'
+                        title={currentBookmark.link}
                      >
-                        Link{' '}
-                        {/* <ExternalLink className='inline-block size-3 ml-1 ' /> */}
+                        <ExternalLink className='size-4 text-cyan-300' />
+                        <span className='truncate'>
+                           {currentBookmark.link
+                              .replace(/^https?:\/\//, '')
+                              .slice(0, 32)}
+                           {currentBookmark.link.length > 32 ? '…' : ''}
+                        </span>
                      </a>
+                     <button
+                        className='group bg-cyan-900/60 hover:bg-cyan-800/80 border border-cyan-400/30 px-2 py-1 rounded-full flex items-center justify-center transition-all duration-150 ml-1'
+                        title='Copy link to clipboard'
+                        onClick={() =>
+                           navigator.clipboard.writeText(currentBookmark.link)
+                        }
+                     >
+                        <Copy className='size-4 text-cyan-300 group-hover:text-white' />
+                     </button>
                   </div>
                )}
                {/* Topic Area */}
@@ -161,15 +170,39 @@ function CurrentBookmark({ currentBookmark }) {
             </div>
          </div>
          {/*//?? Right: AI Chat Column, always visible and wider */}
-         <div className='flex flex-col max-w-sm min-w-[320px] border-l border-cyan-900/40 pl-6 w-1/3'>
+         <div className='flex flex-col max-w-md min-w-[340px] border-l border-cyan-900/40 pl-6 w-1/3'>
             <div className='text-cyan-400 text-lg font-semibold mb-2 text-center'>
                AI Chat
             </div>
-            <div className='flex-1 flex flex-col justify-center items-center text-cyan-300 opacity-80 min-h-[300px] border border-cyan-500 rounded-lg p-2'>
-               AI Chat coming soon...
+            <div className='flex-1 flex flex-col justify-between items-stretch text-cyan-300 opacity-90 min-h-[340px] border border-cyan-500 rounded-xl p-3 bg-black/40'>
+               {/* Chat messages area */}
+               <div className='flex-1 flex flex-col gap-2 overflow-y-auto mb-2'>
+                  {/* Example chat bubble */}
+                  <div className='self-start bg-cyan-800/60 text-white px-3 py-2 rounded-lg max-w-[80%]'>
+                     AI Chat coming soon...
+                  </div>
+                  {/* User/AI messages will go here */}
+               </div>
+               {/* Chat input area */}
+               <form className='flex gap-2 mt-2'>
+                  <input
+                     type='text'
+                     className='flex-1 rounded-lg px-3 py-2 bg-cyan-950/60 text-cyan-100 border border-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-sm'
+                     placeholder='Type your question...'
+                     disabled
+                  />
+                  <button
+                     type='submit'
+                     className='rounded-lg px-4 py-2 bg-cyan-700 text-white font-semibold hover:bg-cyan-800 transition disabled:opacity-60'
+                     disabled
+                  >
+                     Send
+                  </button>
+               </form>
             </div>
          </div>
       </div>
    )
 }
 export default CurrentBookmark
+// Suggestion: For best readability, consider using a slightly more opaque modal background, e.g. bg-black/70 or bg-slate-900/80, instead of bg-black/30, to increase contrast and reduce distraction from the page behind.
