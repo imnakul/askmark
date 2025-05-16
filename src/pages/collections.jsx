@@ -22,6 +22,8 @@ import HeadlineView from '@/components/HeadlineView'
 import { useDispatch, useSelector } from 'react-redux'
 import { addBookmark } from '@/store/slices/bookmarksSlice'
 import CurrentBookmark from '@/components/CurrentBookmark'
+import { db } from '@/lib/firebase'
+import { collection, setDoc, doc } from 'firebase/firestore'
 
 function Collections() {
    const dispatch = useDispatch()
@@ -179,6 +181,32 @@ function Collections() {
    const toggleDropdown = (key) => {
       setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }))
    }
+
+   // Firestore sync: push bookmarks to Firestore on every change
+   useEffect(() => {
+      if (!bookmarks || bookmarks.length === 0) return
+      const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
+         ? JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)
+              .user?.uid
+         : null
+      if (!userId) return
+      const pushToFirestore = async () => {
+         try {
+            // Store all bookmarks under users/{userId}/bookmarks/{bookmarkId}
+            const batch = bookmarks.map(async (bm) => {
+               const safeId = encodeURIComponent(bm.link)
+               await setDoc(doc(db, 'users', userId, 'bookmarks', safeId), bm, {
+                  merge: true,
+               })
+            })
+            await Promise.all(batch)
+         } catch (err) {
+            // Optionally handle error
+            console.error('Error syncing bookmarks to Firestore:', err)
+         }
+      }
+      pushToFirestore()
+   }, [bookmarks])
 
    return (
       <>

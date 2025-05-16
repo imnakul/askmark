@@ -5,8 +5,41 @@ import {
    Trash,
    Copy,
 } from 'lucide-react'
+import { useDispatch } from 'react-redux'
+import { removeBookmark } from '@/store/slices/bookmarksSlice'
+import { db } from '@/lib/firebase'
+import { doc, deleteDoc } from 'firebase/firestore'
 
 function CurrentBookmark({ currentBookmark }) {
+   const dispatch = useDispatch()
+   const handleDelete = async (idOrLink) => {
+      if (!window.confirm('Are you sure you want to delete this bookmark?'))
+         return
+      dispatch(removeBookmark(idOrLink))
+      // Remove from Firestore as well
+      try {
+         const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
+            ? JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)
+                 .user?.uid
+            : null
+         if (!userId) return
+         // Try both id and link as doc id (for compatibility)
+         await deleteDoc(
+            doc(
+               db,
+               'users',
+               userId,
+               'bookmarks',
+               encodeURIComponent(currentBookmark.link)
+            )
+         )
+         // Optionally: await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(idOrLink)))
+      } catch (err) {
+         // Optionally handle error
+         console.error('Error deleting bookmark from Firestore:', err)
+      }
+   }
+
    return (
       <div className='flex flex-col md:flex-row gap-8 p-4 min-w-[340px] max-w-6xl mx-auto items-stretch'>
          {/*//?? Left: Details */}
@@ -22,7 +55,9 @@ function CurrentBookmark({ currentBookmark }) {
                <button
                   className='group bg-white/10 border border-red-300/30 shadow-md hover:bg-red-500/30 hover:border-red-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-red-200/30 hover:ring-red-300/50 focus:outline-none focus:ring-2 focus:ring-red-400/60 min-w-0'
                   title='Delete'
-                  onClick={() => handleDelete(bookmark.id)}
+                  onClick={() =>
+                     handleDelete(currentBookmark.id || currentBookmark.link)
+                  }
                >
                   <Trash className='size-4 text-red-300 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(239,68,68,0.5)]' />
                </button>

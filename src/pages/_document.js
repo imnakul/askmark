@@ -9,7 +9,7 @@ export default function Document() {
                content='Smart Bookmarks who answer your questions about them.'
             />
 
-            <link rel='icon' href='/logo4.png' className='size-14' />
+            <link rel='icon' href='/logo5.svg' />
          </Head>
          <body className='antialiased'>
             <Main></Main>

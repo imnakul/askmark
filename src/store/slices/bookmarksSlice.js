@@ -99,9 +99,12 @@ const bookmarksSlice = createSlice({
             }
          }
       },
+      clearBookmarks: (state) => {
+         state.bookmarks = []
+      },
    },
 })
 
-export const { addBookmark, removeBookmark, updateBookmark } =
+export const { addBookmark, removeBookmark, updateBookmark, clearBookmarks } =
    bookmarksSlice.actions
 export default bookmarksSlice.reducer

@@ -9,6 +9,9 @@ import {
    loginFailure,
    logout as logoutAction,
 } from '@/store/slices/authSlice'
+import { clearBookmarks, addBookmark } from '@/store/slices/bookmarksSlice'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
 function Navbar({ QR, setQR }) {
    const router = useRouter()
@@ -30,6 +33,13 @@ function Navbar({ QR, setQR }) {
                photoURL: user.photoURL,
             })
          )
+         // Fetch bookmarks from Firestore
+         const bookmarksRef = collection(db, 'users', user.uid, 'bookmarks')
+         const snapshot = await getDocs(bookmarksRef)
+         dispatch(clearBookmarks())
+         snapshot.forEach((docSnap) => {
+            dispatch(addBookmark({ ...docSnap.data(), id: docSnap.id }))
+         })
          setDropdownOpen(false)
       } catch (error) {
          dispatch(loginFailure(error.message))
@@ -39,6 +49,7 @@ function Navbar({ QR, setQR }) {
    const handleLogout = async () => {
       await signOut(auth)
       dispatch(logoutAction())
+      dispatch(clearBookmarks())
       setDropdownOpen(false)
    }
 

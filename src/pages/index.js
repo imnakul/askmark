@@ -18,7 +18,7 @@ function Index() {
                Not just saved links.
                <br />
                <Highlight className='text-cyan-200 dark:text-cyan-100'>
-                  "Smart Bookmarks That Talk Back."
+                  &quot;Smart Bookmarks That Talk Back.&quot;
                </Highlight>
                <span className='block text-2xl mt-2 text-cyan-100'>
                   Bookmarks That Let You Ask Questions About the Pages You Save.
