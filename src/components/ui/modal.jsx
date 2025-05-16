@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 function Modal({
    showModal,
    setShowModal,
-   modalContainerClass = 'w-[80vw] sm:w-full sm:max-w-xl',
+   modalContainerClass = 'w-[80vw] sm:w-full sm:max-w-xl bg-gradient-to-b from-cyan-900 to-blue-900',
    closeModalOutsideClick,
    header,
    children,
@@ -54,7 +54,7 @@ function Modal({
                         initial='hidden'
                         animate='visible'
                         exit='exit'
-                        className={`relative transform overflow-hidden rounded-lg backdrop-blur-lg px-3 pt-1 pb-3 text-left shadow-xl  sm:p-6 bg-gradient-to-b from-cyan-900 to-blue-900 ${modalContainerClass}`}
+                        className={`relative transform overflow-hidden rounded-lg backdrop-blur-lg px-3 pt-1 pb-3 text-left shadow-xl sm:p-6  ${modalContainerClass}`}
                      >
                         {/*//~ Close Button */}
                         <div className='absolute right-0 top-0 pr-4 pt-4'>
