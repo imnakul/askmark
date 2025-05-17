@@ -116,7 +116,6 @@ export default function Login() {
                   <span className='truncate'>Sign up with Google</span>
                </button>
             </div>
-            //{' '}
          </div>
       </>
    )
