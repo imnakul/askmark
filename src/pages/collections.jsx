@@ -21,13 +21,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addBookmark } from '@/store/slices/bookmarksSlice'
 import CurrentBookmark from '@/components/CurrentBookmark'
 import { db } from '@/lib/firebase'
-import { collection, setDoc, doc } from 'firebase/firestore'
+import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore'
 import MainContainer from '@/components/MainContainer'
 import { toast } from 'sonner'
 
 function Collections() {
    const dispatch = useDispatch()
    const bookmarks = useSelector((state) => state.bookmarks.bookmarks)
+   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
+   const userId = useSelector((state) => state.auth.user.uid)
 
    const [visible, setVisible] = useState(false)
    const ref = useRef(null)
@@ -182,6 +184,50 @@ function Collections() {
       setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }))
    }
 
+   useEffect(() => {
+      console.log('isLoggedIn:', isLoggedIn, 'userId:', userId)
+
+      if (!isLoggedIn || !userId) return
+      const syncBookmarks = async () => {
+         console.log('syncBookmarks running')
+         try {
+            // 1. Get all existing docs in Firestore
+            const bookmarksRef = collection(db, 'users', userId, 'bookmarks')
+            console.log(bookmarksRef)
+            const snapshot = await getDocs(bookmarksRef)
+            const firestoreIds = snapshot.docs.map((doc) => doc.id)
+
+            // 2. Prepare current Redux IDs
+            const reduxIds = bookmarks.map((bm) => bm.id)
+
+            // 3. Add/update all bookmarks from Redux
+            await Promise.all(
+               bookmarks.map((bm) =>
+                  setDoc(
+                     doc(db, 'users', userId, 'bookmarks', String(bm.id)),
+                     bm,
+                     {
+                        merge: true,
+                     }
+                  )
+               )
+            )
+            toast.success('Bookmarks synced!')
+
+            // 4. Delete bookmarks from Firestore that are not in Redux
+            // const toDelete = firestoreIds.filter((id) => !reduxIds.includes(id))
+            // await Promise.all(
+            //    toDelete.map((id) =>
+            //       deleteDoc(doc(db, 'users', userId, 'bookmarks', id))
+            //    )
+            // )
+         } catch (err) {
+            console.error('Error syncing bookmarks to Firestore:', err)
+            toast.error('Error syncing bookmarks to Firestore')
+         }
+      }
+      syncBookmarks()
+   }, [bookmarks, isLoggedIn, userId])
    // Firestore sync: push bookmarks to Firestore on every change
    // useEffect(() => {
    //    if (!bookmarks || bookmarks.length === 0) return
@@ -374,7 +420,7 @@ function Collections() {
                            />
                            <button
                               type='submit'
-                              className='text-white absolute end-2.5 bottom-[7px] bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40'
+                              className='text-white absolute end-2.5 bottom-[7px] bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200 disabled:cursor-not-allowed '
                               disabled={loading}
                            >
                               Add

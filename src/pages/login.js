@@ -11,11 +11,15 @@ import {
 } from '@/store/slices/authSlice'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { onSnapshot, collection } from 'firebase/firestore'
+import { setBookmarks } from '@/store/slices/bookmarksSlice'
 
 export default function Login() {
    const router = useRouter()
    const dispatch = useDispatch()
    const { loading } = useSelector((state) => state.auth)
+   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
+   const userId = useSelector((state) => state.auth.user.uid)
 
    const handleGoogleLogin = async () => {
       dispatch(loginStart())
@@ -44,9 +48,23 @@ export default function Login() {
       }
    }, [loggedIn])
 
+   // useEffect(() => {
+   //    if (!isLoggedIn || !userId) return
+   //    const unsub = onSnapshot(
+   //       collection(db, 'users', userId, 'bookmarks'),
+   //       (snapshot) => {
+   //          const bookmarks = snapshot.docs.map((doc) => ({
+   //             id: doc.id,
+   //             ...doc.data(),
+   //          }))
+   //          dispatch(setBookmarks(bookmarks))
+   //       }
+   //    )
+   //    return () => unsub()
+   // }, [isLoggedIn, userId])
+
    return (
       <>
-         //{' '}
          <div className='relative min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#0a0f1c] via-[#101a2b] to-[#1a2236] overflow-hidden'>
             <BackgroundBeamsWithCollision className='absolute inset-0 z-0 bg-[url(/5.jpg)] opacity-90' />
             <div className='relative z-10 bg-white/20 border border-cyan-500 backdrop-blur-md rounded-2xl shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg flex flex-col items-center'>
