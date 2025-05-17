@@ -6,6 +6,7 @@ import {
    MessageCircleQuestion,
    Trash,
 } from 'lucide-react'
+import { toast } from 'sonner'
 
 function GridView({ handleShowModal, bookmarks }) {
    const dispatch = useDispatch()
@@ -13,6 +14,7 @@ function GridView({ handleShowModal, bookmarks }) {
    const handleDelete = (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {
          dispatch(removeBookmark(id))
+         toast.success('Bookmark deleted!')
       }
    }
 

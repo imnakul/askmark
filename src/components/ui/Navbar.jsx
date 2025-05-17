@@ -12,6 +12,7 @@ import {
 import { clearBookmarks, addBookmark } from '@/store/slices/bookmarksSlice'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
+import { toast } from 'sonner'
 
 function Navbar({ QR, setQR }) {
    const router = useRouter()
@@ -51,6 +52,7 @@ function Navbar({ QR, setQR }) {
       dispatch(logoutAction())
       dispatch(clearBookmarks())
       setDropdownOpen(false)
+      toast('Logged out successfully!')
       router.push('/')
    }
 

@@ -23,6 +23,7 @@ import CurrentBookmark from '@/components/CurrentBookmark'
 import { db } from '@/lib/firebase'
 import { collection, setDoc, doc } from 'firebase/firestore'
 import MainContainer from '@/components/MainContainer'
+import { toast } from 'sonner'
 
 function Collections() {
    const dispatch = useDispatch()
@@ -82,60 +83,60 @@ function Collections() {
 
    const handleUrlSubmit = async (e) => {
       e.preventDefault()
-      setLoading(true)
 
       if (!webUrl) {
-         alert('Please enter a valid URL.')
-         return
-      }
-
-      try {
-         const response = await fetch(
-            `/api/extract?url=${encodeURIComponent(webUrl)}`
-         )
-
-         const json = await response.json()
-         if (json.success) {
-            console.log('Extracted Data:', json.data)
-            const {
-               category,
-               shortSummary,
-               tags,
-               suggestedTitle,
-               topicArea,
-               tone,
-               suggestedAction,
-            } = json.data.aiAnalysis
-            // Add the bookmark to Redux store
-            dispatch(
-               addBookmark({
-                  title: json.data.title || 'Untitled',
-                  description: json.data.metaDescription || '',
-                  link: webUrl,
-                  thumbnail: json.data.favicon || '',
-                  tags: [...tags], // Can be updated later
-                  createdAt: new Date().toISOString(),
-                  category: category,
-                  shortSummary: shortSummary,
-                  suggestedTitle: suggestedTitle,
-                  topicArea: topicArea,
-                  tone: tone,
-                  suggestedAction: suggestedAction,
-               })
+         return alert('Please enter a valid URL.')
+      } else {
+         setLoading(true)
+         try {
+            const response = await fetch(
+               `/api/extract?url=${encodeURIComponent(webUrl)}`
             )
 
-            // Clear the input
-            setWebUrl('')
-            // Show success message or notification
-         } else {
-            console.error('Error:', json.error)
+            const json = await response.json()
+            if (json.success) {
+               console.log('Extracted Data:', json.data)
+               const {
+                  category,
+                  shortSummary,
+                  tags,
+                  suggestedTitle,
+                  topicArea,
+                  tone,
+                  suggestedAction,
+               } = json.data.aiAnalysis
+               // Add the bookmark to Redux store
+               dispatch(
+                  addBookmark({
+                     title: json.data.title || 'Untitled',
+                     description: json.data.metaDescription || '',
+                     link: webUrl,
+                     thumbnail: json.data.favicon || '',
+                     tags: [...tags], // Can be updated later
+                     createdAt: new Date().toISOString(),
+                     category: category,
+                     shortSummary: shortSummary,
+                     suggestedTitle: suggestedTitle,
+                     topicArea: topicArea,
+                     tone: tone,
+                     suggestedAction: suggestedAction,
+                  })
+               )
+
+               // Clear the input
+               setWebUrl('')
+               toast.success('Bookmark added!')
+               // Show success message or notification
+            } else {
+               console.error('Error:', json.error)
+               // Show error message
+            }
+         } catch (error) {
+            console.error('Error extracting data:', error)
             // Show error message
+         } finally {
+            setLoading(false)
          }
-      } catch (error) {
-         console.error('Error extracting data:', error)
-         // Show error message
-      } finally {
-         setLoading(false)
       }
    }
 
@@ -167,7 +168,7 @@ function Collections() {
    })
 
    const handleShowModal = (bookmark) => {
-      console.log('bookmark', bookmark)
+      // console.log('bookmark', bookmark)
       setCurrentBookmark(bookmark)
       setShowBookmarkModal(!showbookmarkModal)
    }
@@ -369,7 +370,8 @@ function Collections() {
                            />
                            <button
                               type='submit'
-                              className='text-white absolute end-2.5 bottom-[7px] bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200'
+                              className='text-white absolute end-2.5 bottom-[7px] bg-cyan-600 hover:bg-cyan-700 focus:ring-2 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer hover:scale-95 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40'
+                              disabled={loading}
                            >
                               Add
                            </button>
@@ -447,6 +449,8 @@ function Collections() {
                      listView={listView}
                      cardView={cardView}
                      headlineView={headlineView}
+                     setShowBookmarkModal={setShowBookmarkModal}
+                     showbookmarkModal={showbookmarkModal}
                   />
                </div>
 

@@ -10,6 +10,7 @@ import {
    loginFailure,
 } from '@/store/slices/authSlice'
 import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 export default function Login() {
    const router = useRouter()
@@ -21,6 +22,7 @@ export default function Login() {
       try {
          const result = await signInWithPopup(auth, provider)
          const user = result.user
+         toast.success('Login successful! Redirecting to dashboard...')
          dispatch(
             loginSuccess({
                uid: user.uid,
@@ -40,7 +42,7 @@ export default function Login() {
       if (loggedIn) {
          router.push('/collections')
       }
-   }, [])
+   }, [loggedIn])
 
    return (
       <div className='relative min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#0a0f1c] via-[#101a2b] to-[#1a2236] overflow-hidden'>
@@ -63,7 +65,7 @@ export default function Login() {
                Smart Bookmarks That Talk Back
             </p>
             <button
-               className='flex items-center justify-center gap-3 w-full py-3 px-6 rounded-lg bg-white/90 border-2 border-cyan-400 text-cyan-700 font-semibold text-lg shadow-md hover:bg-cyan-50 transition-all duration-200 mb-2 mt-2'
+               className='flex items-center justify-center gap-3 w-full py-3 px-6 rounded-lg bg-white/90 border-2 border-cyan-400 text-cyan-700 font-semibold text-lg shadow-md hover:bg-cyan-50 transition-all duration-200 mb-2 mt-2 cursor-pointer'
                onClick={handleGoogleLogin}
                disabled={loading}
             >

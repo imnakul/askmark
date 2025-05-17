@@ -10,6 +10,8 @@ function MainContainer({
    listView,
    cardView,
    headlineView,
+   setShowBookmarkModal,
+   showBookmarkModal,
 }) {
    return (
       <div className='flex items-center justify-center w-full h-[58vh] md:h-[76vh] lg:h-[73vh] gap-2 '>
@@ -103,6 +105,8 @@ function MainContainer({
                <ListView
                   handleShowModal={handleShowModal}
                   bookmarks={sortedBookmarks}
+                  setShowBookmarkModal={setShowBookmarkModal}
+                  showBookmarkModal={showBookmarkModal}
                />
             )}
             {cardView && !loading && (

@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import { db } from '@/lib/firebase'
 import { doc, deleteDoc } from 'firebase/firestore'
+import { toast } from 'sonner'
 
 function CurrentBookmark({ currentBookmark }) {
    const dispatch = useDispatch()
@@ -16,6 +17,7 @@ function CurrentBookmark({ currentBookmark }) {
       if (!window.confirm('Are you sure you want to delete this bookmark?'))
          return
       dispatch(removeBookmark(idOrLink))
+      toast.success('Bookmark deleted!')
       // Remove from Firestore as well
       // try {
       //    const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth

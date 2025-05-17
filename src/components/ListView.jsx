@@ -7,13 +7,21 @@ import {
    MessageCircleQuestion,
    Trash,
 } from 'lucide-react'
+import { toast } from 'sonner'
 
-function ListView({ handleShowModal, bookmarks }) {
+function ListView({
+   handleShowModal,
+   bookmarks,
+   setShowBookmarkModal,
+   showBookmarkModal,
+}) {
    const dispatch = useDispatch()
 
    const handleDelete = (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {
          dispatch(removeBookmark(id))
+         toast.success('Bookmark deleted!')
+         setShowBookmarkModal(!showBookmarkModal)
       }
    }
 
