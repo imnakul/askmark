@@ -251,7 +251,11 @@ function Collections() {
                      closeModalOutsideClick={() => setShowBookmarkModal(false)}
                   >
                      {currentBookmark && (
-                        <CurrentBookmark currentBookmark={currentBookmark} />
+                        <CurrentBookmark
+                           currentBookmark={currentBookmark}
+                           setShowBookmarkModal={setShowBookmarkModal}
+                           showbookmarkModal={showbookmarkModal}
+                        />
                      )}
                   </Modal>
                )}
@@ -449,8 +453,6 @@ function Collections() {
                      listView={listView}
                      cardView={cardView}
                      headlineView={headlineView}
-                     setShowBookmarkModal={setShowBookmarkModal}
-                     showbookmarkModal={showbookmarkModal}
                   />
                </div>
 

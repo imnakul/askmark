@@ -11,13 +11,18 @@ import { db } from '@/lib/firebase'
 import { doc, deleteDoc } from 'firebase/firestore'
 import { toast } from 'sonner'
 
-function CurrentBookmark({ currentBookmark }) {
+function CurrentBookmark({
+   currentBookmark,
+   showBookmarkModal,
+   setShowBookmarkModal,
+}) {
    const dispatch = useDispatch()
    const handleDelete = async (idOrLink) => {
       if (!window.confirm('Are you sure you want to delete this bookmark?'))
          return
       dispatch(removeBookmark(idOrLink))
       toast.success('Bookmark deleted!')
+      setShowBookmarkModal(false)
       // Remove from Firestore as well
       // try {
       //    const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
