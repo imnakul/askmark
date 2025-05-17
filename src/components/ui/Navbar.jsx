@@ -51,6 +51,7 @@ function Navbar({ QR, setQR }) {
       dispatch(logoutAction())
       dispatch(clearBookmarks())
       setDropdownOpen(false)
+      router.push('/')
    }
 
    return (

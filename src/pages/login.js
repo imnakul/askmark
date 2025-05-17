@@ -9,6 +9,7 @@ import {
    loginSuccess,
    loginFailure,
 } from '@/store/slices/authSlice'
+import { useEffect } from 'react'
 
 export default function Login() {
    const router = useRouter()
@@ -34,9 +35,17 @@ export default function Login() {
       }
    }
 
+   const loggedIn = useSelector((state) => state.auth.isAuthenticated)
+   useEffect(() => {
+      if (loggedIn) {
+         router.push('/collections')
+      }
+   }, [])
+
    return (
       <div className='relative min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#0a0f1c] via-[#101a2b] to-[#1a2236] overflow-hidden'>
-         <BackgroundBeamsWithCollision className='absolute inset-0 z-0 bg-gradient-to-tr from-[#0a0f1c] via-[#052b68] to-[#1a2236] opacity-90' />
+         {/* <BackgroundBeamsWithCollision className='absolute inset-0 z-0 bg-gradient-to-tr from-[#0a0f1c] via-[#052b68] to-[#1a2236] opacity-90' /> */}
+         <BackgroundBeamsWithCollision className='absolute inset-0 z-0 bg-[url(/5.jpg)] opacity-90' />
          <div className='relative z-10 bg-white/10 border border-cyan-500  backdrop-blur-md rounded-2xl shadow-2xl p-8 sm:p-12 w-full max-w-sm flex flex-col items-center'>
             <div className='flex items-center justify-center my-2'>
                <Image
