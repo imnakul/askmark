@@ -18,9 +18,7 @@ function MainContainer({
          <div className='hidden lg:block w-1/6 h-full items-center border border-teal-400 p-4 bg-white/10 rounded-md overflow-y-auto border-r text-sm space-y-6'>
             {/* Section: General */}
             <div className='space-y-2 '>
-               <div className='text-gray-300 cursor-pointer text-base'>
-                  All bookmarks
-               </div>
+               <div className='text-gray-300 cursor-pointer text-base'>All bookmarks</div>
                <div className='text-gray-300 ml-4 cursor-pointer'>Unsorted</div>
                <div className='text-gray-300 ml-4 cursor-pointer'>Trash</div>
             </div>
@@ -29,18 +27,14 @@ function MainContainer({
             <div>
                <div className='flex justify-between items-center uppercase text-xs text-gray-400 mb-2'>
                   <span>Collections</span>
-                  <button className='text-teal-500 hover:text-teal-700 text-base leading-none'>
-                     ＋
-                  </button>
+                  <button className='text-teal-500 hover:text-teal-700 text-base leading-none'>＋</button>
                </div>
                <ul className='space-y-2'>
                   {/* Dropdown: Design Inspiration */}
                   {folders.map((folder) => (
                      <li className='flex items-center gap-2 '>
                         <span>{folder.icon}</span> {folder.title}
-                        <span className='ml-auto text-gray-400'>
-                           {folder.count}
-                        </span>
+                        <span className='ml-auto text-gray-400'>{folder.count}</span>
                      </li>
                   ))}
                   {/* <li>
@@ -73,9 +67,7 @@ function MainContainer({
 
             {/* Section: Filters */}
             <div>
-               <div className='uppercase text-xs text-gray-400 mb-2'>
-                  Filters
-               </div>
+               <div className='uppercase text-xs text-gray-400 mb-2'>Filters</div>
                <ul className='space-y-2'>
                   {filters.map((filter) => {
                      return (
@@ -94,11 +86,9 @@ function MainContainer({
          {/* //?? MAIN CONTAINER WITH VIEWS RENDERING  */}
          <div className='w-full lg:w-5/6 h-full items-center p-2  '>
             {loading && (
-               <div className='flex flex-col items-center justify-center h-full px-4 sm:px-6 lg:px-8'>
+               <div className='flex items-center gap-2 justify-center h-full px-4 sm:px-6 lg:px-8'>
                   <CircleDashed className='text-cyan-400 font-bold text-4xl sm:text-5xl lg:text-6xl animate-spin mb-4' />
-                  <p className='text-xl sm:text-2xl font-semibold text-cyan-500 mb-4 text-center'>
-                     Adding bookmark...
-                  </p>
+                  <p className='text-xl sm:text-2xl font-semibold text-cyan-500 mb-4 text-center'>Just a Moment...</p>
                </div>
             )}
             {listView && !loading && (

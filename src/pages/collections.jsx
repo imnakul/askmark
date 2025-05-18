@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addBookmark } from '@/store/slices/bookmarksSlice'
 import CurrentBookmark from '@/components/CurrentBookmark'
 import { db } from '@/lib/firebase'
-import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore'
+import { collection, setDoc, doc, getDocs, onSnapshot } from 'firebase/firestore'
 import MainContainer from '@/components/MainContainer'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
@@ -201,6 +201,25 @@ function Collections() {
          setLoading(false)
       }
    }
+
+   // ?? REALTIME LISTNER from firestore
+   useEffect(() => {
+      if (!isLoggedIn || !userId) return
+
+      const bookmarksRef = collection(db, 'users', userId, 'bookmarks')
+
+      const unsubscribe = onSnapshot(bookmarksRef, (snapshot) => {
+         const updatedBookmarks = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+         }))
+
+         // Update Redux with the latest bookmarks from Firestore
+         dispatch(addBookmark(updatedBookmarks))
+      })
+
+      return () => unsubscribe() // Cleanup listener on unmount
+   }, [isLoggedIn, userId, dispatch])
 
    // useEffect(() => {
    //    console.log('isLoggedIn:', isLoggedIn, 'userId:', userId)

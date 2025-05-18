@@ -40,7 +40,7 @@ function Modal({
                               y: 0,
                               scale: 1,
                               transition: {
-                                 duration: 0.65,
+                                 duration: 0.45,
                                  ease: [0.22, 1, 0.36, 1],
                               },
                            },
@@ -81,9 +81,7 @@ function Modal({
 
                         {/*//~ Modal Content */}
                         <div className='mt-3 text-center sm:mt-0'>
-                           <h3 className='text-lg font-semibold leading-6 text-gray-50 '>
-                              {header}
-                           </h3>
+                           <h3 className='text-lg font-semibold leading-6 text-gray-50 '>{header}</h3>
                            <div className='mt-4'>{children}</div>
                         </div>
                      </motion.div>
