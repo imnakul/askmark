@@ -74,11 +74,24 @@ const bookmarksSlice = createSlice({
    name: 'bookmarks',
    initialState,
    reducers: {
+      // addBookmark: (state, action) => {
+      //    state.bookmarks.push({
+      //       ...action.payload,
+      //       id: Date.now(), // Add a unique ID
+      //       createdAt: new Date().toISOString(),
+      //    })
+      // },
       addBookmark: (state, action) => {
-         state.bookmarks.push({
-            ...action.payload,
-            id: Date.now(), // Add a unique ID
-            createdAt: new Date().toISOString(),
+         const newBookmarks = Array.isArray(action.payload)
+            ? action.payload
+            : [action.payload]
+         newBookmarks.forEach((bookmark) => {
+            if (!state.bookmarks.some((b) => b.id === bookmark.id)) {
+               state.bookmarks.push({
+                  ...bookmark,
+                  createdAt: bookmark.createdAt || new Date().toISOString(),
+               })
+            }
          })
       },
       removeBookmark: (state, action) => {

@@ -12,14 +12,15 @@ import {
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { onSnapshot, collection } from 'firebase/firestore'
-import { setBookmarks } from '@/store/slices/bookmarksSlice'
+import { db } from '@/lib/firebase'
+import { addBookmark } from '@/store/slices/bookmarksSlice'
 
 export default function Login() {
    const router = useRouter()
    const dispatch = useDispatch()
    const { loading } = useSelector((state) => state.auth)
    const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
-   const userId = useSelector((state) => state.auth.user.uid)
+   const userId = useSelector((state) => state.auth.user?.uid)
 
    const handleGoogleLogin = async () => {
       dispatch(loginStart())
@@ -35,33 +36,35 @@ export default function Login() {
                photoURL: user.photoURL,
             })
          )
-         router.push('/collections')
+         // router.push('/collections')
       } catch (error) {
          dispatch(loginFailure(error.message))
       }
    }
 
-   const loggedIn = useSelector((state) => state.auth.isAuthenticated)
    useEffect(() => {
-      if (loggedIn) {
+      if (isLoggedIn) {
          router.push('/collections')
       }
-   }, [loggedIn])
+   }, [isLoggedIn])
 
-   // useEffect(() => {
-   //    if (!isLoggedIn || !userId) return
-   //    const unsub = onSnapshot(
-   //       collection(db, 'users', userId, 'bookmarks'),
-   //       (snapshot) => {
-   //          const bookmarks = snapshot.docs.map((doc) => ({
-   //             id: doc.id,
-   //             ...doc.data(),
-   //          }))
-   //          dispatch(setBookmarks(bookmarks))
-   //       }
-   //    )
-   //    return () => unsub()
-   // }, [isLoggedIn, userId])
+   useEffect(() => {
+      console.log('isLoogedIN', isLoggedIn, '\nuserId', userId)
+      if (!isLoggedIn || !userId) return
+
+      const unsub = onSnapshot(
+         collection(db, 'users', userId, 'bookmarks'),
+         (snapshot) => {
+            const bookmarks = snapshot.docs.map((doc) => ({
+               id: doc.id,
+               ...doc.data(),
+            }))
+            console.log('bookmark snapshot on login', bookmarks)
+            dispatch(addBookmark(bookmarks))
+         }
+      )
+      return () => unsub()
+   }, [isLoggedIn])
 
    return (
       <>

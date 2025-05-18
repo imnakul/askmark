@@ -29,7 +29,7 @@ function Collections() {
    const dispatch = useDispatch()
    const bookmarks = useSelector((state) => state.bookmarks.bookmarks)
    const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
-   const userId = useSelector((state) => state.auth.user.uid)
+   const userId = useSelector((state) => state.auth.user?.uid)
 
    const [visible, setVisible] = useState(false)
    const ref = useRef(null)
@@ -213,14 +213,6 @@ function Collections() {
                )
             )
             toast.success('Bookmarks synced!')
-
-            // 4. Delete bookmarks from Firestore that are not in Redux
-            // const toDelete = firestoreIds.filter((id) => !reduxIds.includes(id))
-            // await Promise.all(
-            //    toDelete.map((id) =>
-            //       deleteDoc(doc(db, 'users', userId, 'bookmarks', id))
-            //    )
-            // )
          } catch (err) {
             console.error('Error syncing bookmarks to Firestore:', err)
             toast.error('Error syncing bookmarks to Firestore')
