@@ -78,7 +78,7 @@ function Navbar({ QR, setQR }) {
                   ref={avatarRef}
                   onClick={() => setDropdownOpen((v) => !v)}
                >
-                  <div className='ring-cyan-400  ring-offset-base-100 w-8 rounded-full ring-2 ring-offset-2'>
+                  <div className='ring-cyan-400  ring-offset-base-100 w-8 h-8 rounded-full ring-2 ring-offset-2'>
                      <img
                         src={
                            user?.photoURL ||

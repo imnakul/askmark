@@ -24,6 +24,7 @@ import { db } from '@/lib/firebase'
 import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore'
 import MainContainer from '@/components/MainContainer'
 import { toast } from 'sonner'
+import { v4 as uuidv4 } from 'uuid'
 
 function Collections() {
    const dispatch = useDispatch()
@@ -108,22 +109,43 @@ function Collections() {
                   suggestedAction,
                } = json.data.aiAnalysis
                // Add the bookmark to Redux store
-               dispatch(
-                  addBookmark({
-                     title: json.data.title || 'Untitled',
-                     description: json.data.metaDescription || '',
-                     link: webUrl,
-                     thumbnail: json.data.favicon || '',
-                     tags: [...tags], // Can be updated later
-                     createdAt: new Date().toISOString(),
-                     category: category,
-                     shortSummary: shortSummary,
-                     suggestedTitle: suggestedTitle,
-                     topicArea: topicArea,
-                     tone: tone,
-                     suggestedAction: suggestedAction,
-                  })
-               )
+
+               const newBookmark = {
+                  id: uuidv4(),
+                  title: json.data.title || 'Untitled',
+                  description: json.data.metaDescription || '',
+                  link: webUrl,
+                  thumbnail: json.data.favicon || '',
+                  tags: [...tags], // Can be updated later
+                  createdAt: new Date().toISOString(),
+                  category: category,
+                  shortSummary: shortSummary,
+                  suggestedTitle: suggestedTitle,
+                  topicArea: topicArea,
+                  tone: tone,
+                  suggestedAction: suggestedAction,
+               }
+
+               dispatch(addBookmark(newBookmark))
+               try {
+                  await setDoc(
+                     doc(
+                        db,
+                        'users',
+                        userId,
+                        'bookmarks',
+                        String(newBookmark.id)
+                     ),
+                     newBookmark,
+                     {
+                        merge: true,
+                     }
+                  ) // Sync to Firestore
+                  toast.success('Bookmarks synced!')
+               } catch (error) {
+                  console.error('Error syncing to Firestore:', error)
+                  toast.error('Error syncing to Firestore')
+               }
 
                // Clear the input
                setWebUrl('')
@@ -184,42 +206,42 @@ function Collections() {
       setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }))
    }
 
-   useEffect(() => {
-      console.log('isLoggedIn:', isLoggedIn, 'userId:', userId)
+   // useEffect(() => {
+   //    console.log('isLoggedIn:', isLoggedIn, 'userId:', userId)
 
-      if (!isLoggedIn || !userId) return
-      const syncBookmarks = async () => {
-         console.log('syncBookmarks running')
-         try {
-            // 1. Get all existing docs in Firestore
-            const bookmarksRef = collection(db, 'users', userId, 'bookmarks')
-            console.log(bookmarksRef)
-            const snapshot = await getDocs(bookmarksRef)
-            const firestoreIds = snapshot.docs.map((doc) => doc.id)
+   //    if (!isLoggedIn || !userId) return
+   //    const syncBookmarks = async () => {
+   //       console.log('syncBookmarks running')
+   //       try {
+   //          // 1. Get all existing docs in Firestore
+   //          const bookmarksRef = collection(db, 'users', userId, 'bookmarks')
+   //          console.log(bookmarksRef)
+   //          const snapshot = await getDocs(bookmarksRef)
+   //          const firestoreIds = snapshot.docs.map((doc) => doc.id)
 
-            // 2. Prepare current Redux IDs
-            const reduxIds = bookmarks.map((bm) => bm.id)
+   //          // 2. Prepare current Redux IDs
+   //          const reduxIds = bookmarks.map((bm) => bm.id)
 
-            // 3. Add/update all bookmarks from Redux
-            await Promise.all(
-               bookmarks.map((bm) =>
-                  setDoc(
-                     doc(db, 'users', userId, 'bookmarks', String(bm.id)),
-                     bm,
-                     {
-                        merge: true,
-                     }
-                  )
-               )
-            )
-            toast.success('Bookmarks synced!')
-         } catch (err) {
-            console.error('Error syncing bookmarks to Firestore:', err)
-            toast.error('Error syncing bookmarks to Firestore')
-         }
-      }
-      syncBookmarks()
-   }, [bookmarks, isLoggedIn, userId])
+   //          // 3. Add/update all bookmarks from Redux
+   //          await Promise.all(
+   //             bookmarks.map((bm) =>
+   //                setDoc(
+   //                   doc(db, 'users', userId, 'bookmarks', String(bm.id)),
+   //                   bm,
+   //                   {
+   //                      merge: true,
+   //                   }
+   //                )
+   //             )
+   //          )
+   //          toast.success('Bookmarks synced!')
+   //       } catch (err) {
+   //          console.error('Error syncing bookmarks to Firestore:', err)
+   //          toast.error('Error syncing bookmarks to Firestore')
+   //       }
+   //    }
+   //    syncBookmarks()
+   // }, [bookmarks, isLoggedIn, userId])
    // Firestore sync: push bookmarks to Firestore on every change
    // useEffect(() => {
    //    if (!bookmarks || bookmarks.length === 0) return
