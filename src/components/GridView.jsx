@@ -57,21 +57,21 @@ function GridView({ handleShowModal, bookmarks }) {
                <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent px-4 py-2 flex items-center justify-between gap-2 border-t border-cyan-400/20 backdrop-blur-md my-2'>
                   <div className='flex gap-2'>
                      <button
-                        className='group bg-white/10 border border-cyan-300/30 shadow-md hover:bg-cyan-400/30 hover:border-cyan-300/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 min-w-0'
+                        className='group bg-white/10 border border-cyan-300/30 shadow-md hover:bg-cyan-400/30 hover:border-cyan-300/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 min-w-0 cursor-pointer'
                         title='More Info'
                         onClick={() => handleShowModal(bookmark)}
                      >
                         <InfoIcon className='size-4 text-cyan-200 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]' />
                      </button>
                      <button
-                        className='group bg-white/10 border border-red-300/30 shadow-md hover:bg-red-500/30 hover:border-red-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-red-200/30 hover:ring-red-300/50 focus:outline-none focus:ring-2 focus:ring-red-400/60 min-w-0'
+                        className='group bg-white/10 border border-red-300/30 shadow-md hover:bg-red-500/30 hover:border-red-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-red-200/30 hover:ring-red-300/50 focus:outline-none focus:ring-2 focus:ring-red-400/60 min-w-0 cursor-pointer'
                         title='Delete'
                         onClick={() => handleDelete(bookmark.id)}
                      >
                         <Trash className='size-4 text-red-300 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(239,68,68,0.5)]' />
                      </button>
                      <button
-                        className='group bg-white/10 border border-cyan-200/30 shadow-md hover:bg-cyan-600/30 hover:border-cyan-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 min-w-0'
+                        className='group bg-white/10 border border-cyan-200/30 shadow-md hover:bg-cyan-600/30 hover:border-cyan-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 min-w-0 cursor-pointer'
                         title='Ask'
                      >
                         <MessageCircleQuestion className='size-4 text-cyan-300 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]' />
@@ -81,7 +81,7 @@ function GridView({ handleShowModal, bookmarks }) {
                      href={bookmark.link}
                      target='_blank'
                      rel='noopener noreferrer'
-                     className='group bg-white/10 border border-blue-300/30 shadow-md hover:bg-blue-600/30 hover:border-blue-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-blue-200/30 hover:ring-blue-400/50 focus:outline-none focus:ring-2 focus:ring-blue-500/60 min-w-0'
+                     className='group bg-white/10 border border-blue-300/30 shadow-md hover:bg-blue-600/30 hover:border-blue-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-blue-200/30 hover:ring-blue-400/50 focus:outline-none focus:ring-2 focus:ring-blue-500/60 min-w-0 cursor-pointer'
                      title='Open'
                   >
                      <ExternalLink className='size-4 text-blue-300 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(59,130,246,0.5)]' />
