@@ -1,20 +1,19 @@
 // import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
-import {
-   InfoIcon,
-   ExternalLink,
-   MessageCircleQuestion,
-   Trash,
-} from 'lucide-react'
+import { InfoIcon, ExternalLink, MessageCircleQuestion, Trash } from 'lucide-react'
 import { toast } from 'sonner'
+import { doc, deleteDoc } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
 function ListView({ handleShowModal, bookmarks }) {
    const dispatch = useDispatch()
+   const userId = useSelector((state) => state.auth.user?.uid)
 
-   const handleDelete = (id) => {
+   const handleDelete = async (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {
          dispatch(removeBookmark(id))
+         await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
          toast.success('Bookmark deleted!')
       }
    }
@@ -63,7 +62,7 @@ function ListView({ handleShowModal, bookmarks }) {
                      </p>
                   </div>
                   {/* Action Buttons */}
-                  <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-3 py-1 flex items-center justify-between gap-2 pb-3'>
+                  <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-3 py-1 flex items-center justify-between gap-2 pb-4'>
                      <div className='flex gap-2'>
                         <button
                            className='group bg-white/10 border border-cyan-300/30 shadow-md hover:bg-cyan-400/30 hover:border-cyan-300/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 min-w-0'

@@ -1,27 +1,19 @@
-import {
-   Pencil,
-   ExternalLink,
-   MessageCircleQuestion,
-   Trash,
-   Copy,
-} from 'lucide-react'
-import { useDispatch } from 'react-redux'
+import { Pencil, ExternalLink, MessageCircleQuestion, Trash, Copy } from 'lucide-react'
+import { useDispatch, useSelector } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
 import { db } from '@/lib/firebase'
 import { doc, deleteDoc } from 'firebase/firestore'
 import { toast } from 'sonner'
 
-function CurrentBookmark({
-   currentBookmark,
-   showBookmarkModal,
-   setShowBookmarkModal,
-}) {
+function CurrentBookmark({ currentBookmark, showBookmarkModal, setShowBookmarkModal }) {
    const dispatch = useDispatch()
-   const handleDelete = async (idOrLink) => {
-      if (!window.confirm('Are you sure you want to delete this bookmark?'))
-         return
-      dispatch(removeBookmark(idOrLink))
+   const userId = useSelector((state) => state.auth.user?.uid)
+
+   const handleDelete = async (id) => {
+      if (!window.confirm('Are you sure you want to delete this bookmark?')) return
+      dispatch(removeBookmark(id))
       toast.success('Bookmark deleted!')
+      await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
       setShowBookmarkModal(false)
       // Remove from Firestore as well
       // try {
@@ -62,9 +54,7 @@ function CurrentBookmark({
                <button
                   className='group bg-white/10 border border-red-300/30 shadow-md hover:bg-red-500/30 hover:border-red-400/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-red-200/30 hover:ring-red-300/50 focus:outline-none focus:ring-2 focus:ring-red-400/60 min-w-0'
                   title='Delete'
-                  onClick={() =>
-                     handleDelete(currentBookmark.id || currentBookmark.link)
-                  }
+                  onClick={() => handleDelete(currentBookmark.id || currentBookmark.link)}
                >
                   <Trash className='size-4 text-red-300 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(239,68,68,0.5)]' />
                </button>
@@ -107,18 +97,14 @@ function CurrentBookmark({
                      >
                         <ExternalLink className='size-4 text-cyan-300' />
                         <span className='truncate'>
-                           {currentBookmark.link
-                              .replace(/^https?:\/\//, '')
-                              .slice(0, 32)}
+                           {currentBookmark.link.replace(/^https?:\/\//, '').slice(0, 32)}
                            {currentBookmark.link.length > 32 ? '…' : ''}
                         </span>
                      </a>
                      <button
                         className='group bg-cyan-900/60 hover:bg-cyan-800/80 border border-cyan-400/30 px-2 py-1 rounded-full flex items-center justify-center transition-all duration-150 ml-1'
                         title='Copy link to clipboard'
-                        onClick={() =>
-                           navigator.clipboard.writeText(currentBookmark.link)
-                        }
+                        onClick={() => navigator.clipboard.writeText(currentBookmark.link)}
                      >
                         <Copy className='size-4 text-cyan-300 group-hover:text-white' />
                      </button>
@@ -127,9 +113,7 @@ function CurrentBookmark({
                {/* Topic Area */}
                {currentBookmark.topicArea && (
                   <div className='flex flex-col items-center md:items-start'>
-                     <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider'>
-                        Topic Area
-                     </span>
+                     <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider'>Topic Area</span>
                      <span className='text-cyan-100 font-medium text-center md:text-left'>
                         {currentBookmark.topicArea}
                      </span>
@@ -138,12 +122,8 @@ function CurrentBookmark({
                {/* Tone */}
                {currentBookmark.tone && (
                   <div className='flex flex-col items-center md:items-start'>
-                     <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider'>
-                        Tone
-                     </span>
-                     <span className='text-cyan-100 font-medium text-center md:text-left'>
-                        {currentBookmark.tone}
-                     </span>
+                     <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider'>Tone</span>
+                     <span className='text-cyan-100 font-medium text-center md:text-left'>{currentBookmark.tone}</span>
                   </div>
                )}
                {/* Suggested Action */}
@@ -161,32 +141,25 @@ function CurrentBookmark({
             {/* Summary Section */}
             {currentBookmark.shortSummary && (
                <div className='w-full flex flex-col items-center mt-2'>
-                  <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>
-                     Summary
-                  </span>
+                  <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>Summary</span>
                   <span className='text-white text-center leading-relaxed max-w-2xl bg-cyan-900/30 rounded-lg px-4 py-2'>
                      {currentBookmark.shortSummary}
                   </span>
                </div>
             )}
             {/* Description Section */}
-            {currentBookmark.description &&
-               currentBookmark.description.trim() && (
-                  <div className='w-full flex flex-col items-center mt-2'>
-                     <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>
-                        Description
-                     </span>
-                     <span className='text-white text-center leading-relaxed max-w-2xl bg-cyan-900/30 rounded-lg px-4 py-2'>
-                        {currentBookmark.description}
-                     </span>
-                  </div>
-               )}
+            {currentBookmark.description && currentBookmark.description.trim() && (
+               <div className='w-full flex flex-col items-center mt-2'>
+                  <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>Description</span>
+                  <span className='text-white text-center leading-relaxed max-w-2xl bg-cyan-900/30 rounded-lg px-4 py-2'>
+                     {currentBookmark.description}
+                  </span>
+               </div>
+            )}
             {/* Tags Section */}
             {currentBookmark.tags && currentBookmark.tags.length > 0 && (
                <div className='w-full flex flex-col items-center mt-2'>
-                  <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>
-                     Tags
-                  </span>
+                  <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>Tags</span>
                   <div className='flex flex-wrap gap-2 justify-center'>
                      {currentBookmark.tags.map((tag, idx) => (
                         <span
@@ -201,21 +174,15 @@ function CurrentBookmark({
             )}
             {/* Created At */}
             <div className='w-full flex flex-col items-center mt-2'>
-               <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>
-                  Created At
-               </span>
+               <span className='font-semibold text-cyan-300 uppercase text-xs tracking-wider mb-1'>Created At</span>
                <span className='text-cyan-100 text-center'>
-                  {currentBookmark.createdAt
-                     ? new Date(currentBookmark.createdAt).toLocaleString()
-                     : 'N/A'}
+                  {currentBookmark.createdAt ? new Date(currentBookmark.createdAt).toLocaleString() : 'N/A'}
                </span>
             </div>
          </div>
          {/*//?? Right: AI Chat Column, always visible and wider */}
          <div className='flex flex-col max-w-md min-w-[340px] border-l border-cyan-900/40 pl-6 w-1/3'>
-            <div className='text-cyan-400 text-lg font-semibold mb-2 text-center'>
-               AI Chat
-            </div>
+            <div className='text-cyan-400 text-lg font-semibold mb-2 text-center'>AI Chat</div>
             <div className='flex-1 flex flex-col justify-between items-stretch text-cyan-300 opacity-90 min-h-[340px] border border-cyan-500 rounded-xl p-3 bg-black/40'>
                {/* Chat messages area */}
                <div className='flex-1 flex flex-col gap-2 overflow-y-auto mb-2'>

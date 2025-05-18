@@ -1,19 +1,18 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { removeBookmark } from '@/store/slices/bookmarksSlice'
-import {
-   InfoIcon,
-   ExternalLink,
-   MessageCircleQuestion,
-   Trash,
-} from 'lucide-react'
+import { InfoIcon, ExternalLink, MessageCircleQuestion, Trash } from 'lucide-react'
 import { toast } from 'sonner'
+import { doc, deleteDoc } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
 function HeadlineView({ handleShowModal, bookmarks }) {
    const dispatch = useDispatch()
+   const userId = useSelector((state) => state.auth.user?.uid)
 
-   const handleDelete = (id) => {
+   const handleDelete = async (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {
          dispatch(removeBookmark(id))
+         await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
          toast.success('Bookmark deleted!')
       }
    }
