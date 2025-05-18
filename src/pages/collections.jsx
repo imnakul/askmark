@@ -102,14 +102,16 @@ function Collections() {
                }
 
                dispatch(addBookmark(newBookmark))
-               try {
-                  await setDoc(doc(db, 'users', userId, 'bookmarks', String(newBookmark.id)), newBookmark, {
-                     merge: true,
-                  }) // Sync to Firestore
-                  toast.success('Bookmarks synced!')
-               } catch (error) {
-                  console.error('Error syncing to Firestore:', error)
-                  toast.error('Error syncing to Firestore')
+               if (isLoggedIn && userId) {
+                  try {
+                     await setDoc(doc(db, 'users', userId, 'bookmarks', String(newBookmark.id)), newBookmark, {
+                        merge: true,
+                     }) // Sync to Firestore
+                     toast.success('Bookmarks synced!')
+                  } catch (error) {
+                     console.error('Error syncing to Firestore:', error)
+                     toast.error('Error syncing to Firestore')
+                  }
                }
 
                // Clear the input
@@ -420,23 +422,51 @@ function Collections() {
                            )}
                         </div>
                         <div className='relative'>
-                           <button
-                              onClick={handleManualSync}
-                              title='Manual Sync with Firestore'
-                              className=' cursor-pointer size-5 text-cyan-300 hover:text-cyan-600'
-                           >
-                              <svg
-                                 xmlns='http://www.w3.org/2000/svg'
-                                 width='20'
-                                 height='20'
-                                 viewBox='0 0 24 24'
+                           {isLoggedIn ? (
+                              <button
+                                 onClick={handleManualSync}
+                                 title='Manual Sync with Firestore'
+                                 className=' cursor-pointer size-5 text-cyan-300 hover:text-cyan-600'
                               >
-                                 <path
-                                    fill='currentColor'
-                                    d='M13.03 18c.05.7.21 1.38.47 2h-7c-1.5 0-2.81-.5-3.89-1.57C1.54 17.38 1 16.09 1 14.58c0-1.3.39-2.46 1.17-3.48S4 9.43 5.25 9.15c.42-1.53 1.25-2.77 2.5-3.72S10.42 4 12 4c1.95 0 3.6.68 4.96 2.04C18.32 7.4 19 9.05 19 11h.1c-.74.07-1.45.23-2.1.5V11c0-1.38-.5-2.56-1.46-3.54C14.56 6.5 13.38 6 12 6s-2.56.5-3.54 1.46C7.5 8.44 7 9.62 7 11h-.5c-.97 0-1.79.34-2.47 1.03c-.69.68-1.03 1.5-1.03 2.47s.34 1.79 1.03 2.5c.68.66 1.5 1 2.47 1h6.53M19 13.5V12l-2.25 2.25L19 16.5V15a2.5 2.5 0 0 1 2.5 2.5c0 .4-.09.78-.26 1.12l1.09 1.09c.42-.63.67-1.39.67-2.21c0-2.21-1.79-4-4-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5c0-.4.09-.78.26-1.12l-1.09-1.09c-.42.63-.67 1.39-.67 2.21c0 2.21 1.79 4 4 4V23l2.25-2.25L19 18.5V20Z'
-                                 />
-                              </svg>
-                           </button>
+                                 <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='20'
+                                    height='20'
+                                    viewBox='0 0 24 24'
+                                 >
+                                    <path
+                                       fill='currentColor'
+                                       d='M13.03 18c.05.7.21 1.38.47 2h-7c-1.5 0-2.81-.5-3.89-1.57C1.54 17.38 1 16.09 1 14.58c0-1.3.39-2.46 1.17-3.48S4 9.43 5.25 9.15c.42-1.53 1.25-2.77 2.5-3.72S10.42 4 12 4c1.95 0 3.6.68 4.96 2.04C18.32 7.4 19 9.05 19 11h.1c-.74.07-1.45.23-2.1.5V11c0-1.38-.5-2.56-1.46-3.54C14.56 6.5 13.38 6 12 6s-2.56.5-3.54 1.46C7.5 8.44 7 9.62 7 11h-.5c-.97 0-1.79.34-2.47 1.03c-.69.68-1.03 1.5-1.03 2.47s.34 1.79 1.03 2.5c.68.66 1.5 1 2.47 1h6.53M19 13.5V12l-2.25 2.25L19 16.5V15a2.5 2.5 0 0 1 2.5 2.5c0 .4-.09.78-.26 1.12l1.09 1.09c.42-.63.67-1.39.67-2.21c0-2.21-1.79-4-4-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5c0-.4.09-.78.26-1.12l-1.09-1.09c-.42.63-.67 1.39-.67 2.21c0 2.21 1.79 4 4 4V23l2.25-2.25L19 18.5V20Z'
+                                    />
+                                 </svg>
+                              </button>
+                           ) : (
+                              <button
+                                 onClick={handleManualSync}
+                                 title='Cloud Sync - Unavailable'
+                                 className=' cursor-pointer size-5 text-red-400 hover:text-red-600'
+                              >
+                                 <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='20'
+                                    height='20'
+                                    viewBox='0 0 24 24'
+                                 >
+                                    <g
+                                       fill='none'
+                                       stroke='currentColor'
+                                       stroke-linejoin='round'
+                                       stroke-width='1.5'
+                                    >
+                                       <path d='M2 14.5A4.5 4.5 0 0 0 6.5 19h12a3.5 3.5 0 0 0 .5-6.965a7 7 0 0 0-13.76-1.857A4.502 4.502 0 0 0 2 14.5Z' />
+                                       <path
+                                          stroke-linecap='round'
+                                          d='m10 11l4 4m-4 0l4-4'
+                                       />
+                                    </g>
+                                 </svg>
+                              </button>
+                           )}
                         </div>
                      </div>
 

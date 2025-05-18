@@ -9,11 +9,14 @@ import { db } from '@/lib/firebase'
 function ListView({ handleShowModal, bookmarks }) {
    const dispatch = useDispatch()
    const userId = useSelector((state) => state.auth.user?.uid)
+   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
 
    const handleDelete = async (id) => {
       if (window.confirm('Are you sure you want to delete this bookmark?')) {
          dispatch(removeBookmark(id))
-         await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
+         if (isLoggedIn) {
+            await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
+         }
          toast.success('Bookmark deleted!')
       }
    }

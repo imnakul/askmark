@@ -60,7 +60,7 @@ function Modal({
                         <div className='absolute right-0 top-0 pr-4 pt-4'>
                            <button
                               onClick={() => setShowModal(false)}
-                              className='rounded-md text-gray-800 dark:text-gray-400 hover:text-gray-500 hover:bg-gray-800 p-1'
+                              className='rounded-md text-gray-300 dark:text-gray-300 hover:text-gray-500 hover:bg-gray-800 p-1'
                            >
                               <span className='sr-only'>Close</span>
                               <svg

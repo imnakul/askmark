@@ -8,21 +8,27 @@ import { toast } from 'sonner'
 function CurrentBookmark({ currentBookmark, showBookmarkModal, setShowBookmarkModal }) {
    const dispatch = useDispatch()
    const userId = useSelector((state) => state.auth.user?.uid)
+   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
 
    const handleDelete = async (id) => {
       if (!window.confirm('Are you sure you want to delete this bookmark?')) return
       dispatch(removeBookmark(id))
 
-      await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
+      if (isLoggedIn) {
+         await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
+      }
       setShowBookmarkModal(false)
       toast.success('Bookmark deleted!')
    }
 
    const handleUpdate = async (id, bookmark) => {
       dispatch(updateBookmark(id))
-      await setDoc(doc(db, 'users', userId, 'bookmarks', String(id)), bookmark, {
-         merge: true,
-      }) // Sync to Firestore
+      if (isLoggedIn) {
+         await setDoc(doc(db, 'users', userId, 'bookmarks', String(id)), bookmark, {
+            merge: true,
+         }) // Sync to Firestore
+      }
+
       setShowBookmarkModal(false)
       toast.success('Bookmark Updated!')
    }

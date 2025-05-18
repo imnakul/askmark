@@ -115,12 +115,14 @@ function Index() {
                         <span className='relative z-10'>{isLoggedIn ? 'Dashboard' : 'Get Started'}</span>
                         <span className='absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl '></span>
                      </button>
-                     <button
-                        onClick={() => router.push('/collections')}
-                        className='inline-flex items-center px-8 py-3 rounded-xl border-2 border-cyan-400 text-cyan-200 dark:text-cyan-100 font-bold text-lg bg-white/10 dark:bg-slate-900/40 shadow-md hover:bg-cyan-900/30 dark:hover:bg-slate-800/60 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 cursor-pointer'
-                     >
-                        Demo
-                     </button>
+                     {!isLoggedIn && (
+                        <button
+                           onClick={() => router.push('/collections')}
+                           className='inline-flex items-center px-8 py-3 rounded-xl border-2 border-cyan-400 text-cyan-200 dark:text-cyan-100 font-bold text-lg bg-white/10 dark:bg-slate-900/40 shadow-md hover:bg-cyan-900/30 dark:hover:bg-slate-800/60 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 cursor-pointer'
+                        >
+                           Demo
+                        </button>
+                     )}
                   </div>
 
                   {/* //~ Coffee */}
@@ -205,12 +207,14 @@ function Index() {
                         <span className='relative z-10'>{isLoggedIn ? 'Dashboard' : 'Get Started'}</span>
                         <span className='absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl '></span>
                      </button>
-                     <button
-                        onClick={() => router.push('/collections')}
-                        className='inline-flex items-center px-8 py-3 rounded-xl border-2 border-cyan-400 text-cyan-200 dark:text-cyan-100 font-bold text-lg bg-white/10 dark:bg-slate-900/40 shadow-md hover:bg-cyan-900/30 dark:hover:bg-slate-800/60 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 cursor-pointer'
-                     >
-                        Demo
-                     </button>
+                     {!isLoggedIn && (
+                        <button
+                           onClick={() => router.push('/collections')}
+                           className='inline-flex items-center px-8 py-3 rounded-xl border-2 border-cyan-400 text-cyan-200 dark:text-cyan-100 font-bold text-lg bg-white/10 dark:bg-slate-900/40 shadow-md hover:bg-cyan-900/30 dark:hover:bg-slate-800/60 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 cursor-pointer'
+                        >
+                           Demo
+                        </button>
+                     )}
                   </div>
 
                   {/* //~ Coffee */}
@@ -255,12 +259,14 @@ function Index() {
                         <span className='relative z-10'>{isLoggedIn ? 'Dashboard' : 'Get Started'}</span>
                         <span className='absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl '></span>
                      </button>
-                     <button
-                        onClick={() => router.push('/collections')}
-                        className='inline-flex items-center px-8 py-3 rounded-xl border-2 border-cyan-400 text-cyan-200 dark:text-cyan-100 font-bold text-lg bg-white/10 dark:bg-slate-900/40 shadow-md hover:bg-cyan-900/30 dark:hover:bg-slate-800/60 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 cursor-pointer'
-                     >
-                        Demo
-                     </button>
+                     {!isLoggedIn && (
+                        <button
+                           onClick={() => router.push('/collections')}
+                           className='inline-flex items-center px-8 py-3 rounded-xl border-2 border-cyan-400 text-cyan-200 dark:text-cyan-100 font-bold text-lg bg-white/10 dark:bg-slate-900/40 shadow-md hover:bg-cyan-900/30 dark:hover:bg-slate-800/60 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 cursor-pointer'
+                        >
+                           Demo
+                        </button>
+                     )}
                   </div>
 
                   <div className='my-8 flex flex-col gap-4 items-center justify-center w-full max-w-2xl '>

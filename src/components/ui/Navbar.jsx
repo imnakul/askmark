@@ -47,6 +47,7 @@ function Navbar({ QR, setQR }) {
       dispatch(logoutAction())
       dispatch(clearBookmarks())
       setDropdownOpen(false)
+      localStorage.clear()
       toast('Logged out successfully!')
       router.push('/')
    }
@@ -68,6 +69,31 @@ function Navbar({ QR, setQR }) {
                AskMark
             </span>
          </div>
+
+         {/* //?? DEMO BANNER */}
+         {!isAuthenticated && (
+            <div
+               id='marketing-banner'
+               tabindex='-1'
+               className='fixed z-50 flex md:flex-row justify-between w-[calc(100%-2rem)] px-4 py-2 -translate-x-1/2  rounded-lg shadow-xs max-w-xs sm:max-w-md lg:max-w-md lg:left-1/2 md:left-4/7 left-1/2 top-2 bg-gradient-to-tr from-cyan-500 to-blue-700 text-white border border-cyan-300'
+            >
+               <div className='flex mb-3 me-4 items-center md:mb-0'>
+                  <p className='flex items-center text-xs sm:text-sm font-bold text-cyan-950'>
+                     DEMO Mode: To save bookmarks
+                  </p>
+               </div>
+               <div className='flex items-center'>
+                  <button
+                     className='flex items-center justify-center gap-2 p-2 rounded-md bg-gradient-to-tr from-cyan-900 to-blue-900 text-white font-bold hover:from-cyan-800 hover:to-blue-600 transition-all duration-200 cursor-pointer'
+                     onClick={handleGoogleLogin}
+                     disabled={loading}
+                  >
+                     <span className='sm:flex hidden text-xs sm:text-base'>Sign up with Google</span>
+                     <span className='sm:hidden flex text-xs sm:text-base'>Sign up</span>
+                  </button>
+               </div>
+            </div>
+         )}
 
          <div className='flex items-center gap-4 justify-center px-2 py-1'>
             {/* //?? Avatar */}
