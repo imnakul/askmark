@@ -3,12 +3,7 @@ import { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { signInWithPopup, signOut } from 'firebase/auth'
 import { auth, provider } from '@/lib/firebase'
-import {
-   loginStart,
-   loginSuccess,
-   loginFailure,
-   logout as logoutAction,
-} from '@/store/slices/authSlice'
+import { loginStart, loginSuccess, loginFailure, logout as logoutAction } from '@/store/slices/authSlice'
 import { clearBookmarks, addBookmark } from '@/store/slices/bookmarksSlice'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
@@ -58,10 +53,14 @@ function Navbar({ QR, setQR }) {
 
    return (
       <div className='navbar bg-gradient-to-r from-black/20 to-white/10 shadow-sm max-w-7xl w-full mx-auto rounded-md flex items-center justify-between px-4'>
-         <div className='flex items-center gap-0 cursor-pointer'>
-            <img src='/logo4.png' alt='logo' className='size-12' />
+         <div className='flex items-center gap-1 cursor-pointer'>
+            <img
+               src='/logo4.png'
+               alt='logo'
+               className='size-12'
+            />
             <span
-               className='font-bold text-black dark:text-white text-xl '
+               className='font-bold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500'
                onClick={() => {
                   router.push('/')
                }}
@@ -78,13 +77,8 @@ function Navbar({ QR, setQR }) {
                   ref={avatarRef}
                   onClick={() => setDropdownOpen((v) => !v)}
                >
-                  <div className='ring-cyan-400  ring-offset-base-100 w-8 h-8 rounded-full ring-2 ring-offset-2'>
-                     <img
-                        src={
-                           user?.photoURL ||
-                           'https://img.daisyui.com/images/profile/demo/spiderperson@192.webp'
-                        }
-                     />
+                  <div className='ring-cyan-400  ring-offset-base-100 w-8 h-8 rounded-full ring ring-offset-2'>
+                     <img src={user?.photoURL || 'https://img.daisyui.com/images/profile/demo/spiderperson@192.webp'} />
                   </div>
                </div>
                {dropdownOpen && (
@@ -100,9 +94,7 @@ function Navbar({ QR, setQR }) {
                                  <div className='font-semibold text-cyan-700 dark:text-cyan-300 text-sm'>
                                     {user?.displayName}
                                  </div>
-                                 <div className='text-xs text-gray-500 dark:text-gray-300'>
-                                    {user?.email}
-                                 </div>
+                                 <div className='text-xs text-gray-500 dark:text-gray-300'>{user?.email}</div>
                               </div>
                            </div>
                            <button
@@ -149,7 +141,10 @@ function Navbar({ QR, setQR }) {
                   </div>
                )}
             </div>
-            <button onClick={() => setQR(!QR)} className=''>
+            <button
+               onClick={() => setQR(!QR)}
+               className=''
+            >
                <img
                   src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnplZnJ5ZWZmc3ZlaWg2bGU5eGZ0N2JzMDVoczk3bnNqMjJ0MXd6NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TDQOtnWgsBx99cNoyH/giphy.gif'
                   className='size-10 cursor-pointer'

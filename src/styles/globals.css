@@ -1,73 +1,74 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+   --color-background: var(--background);
+   --color-foreground: var(--foreground);
+   --font-sans: var(--font-geist-sans);
+   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+   :root {
+      --background: #0a0a0a;
+      --foreground: #ededed;
+   }
 }
 
-html, body {
-  font-family: 'Space Grotesk', Arial, Helvetica, sans-serif;
+html,
+body {
+   font-family: 'Space Grotesk', Arial, Helvetica, sans-serif;
 }
 
 * {
-  font-family: inherit;
+   font-family: inherit;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+   background: var(--background);
+   color: var(--foreground);
 }
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --primary: #014453;
-  --secondary: #036681;
-  --accent: #ff5e94;
-  --muted: #2a2a2a;
-  --card: #111111;
+   --background: #0a0a0a;
+   --foreground: #ededed;
+   --primary: #014453;
+   --secondary: #036681;
+   --accent: #ff5e94;
+   --muted: #2a2a2a;
+   --card: #111111;
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
+   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+   background: var(--muted);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+   background: var(--primary);
+   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
+   background: var(--secondary);
 }
 
 .card:hover {
-  background: linear-gradient(145deg, rgba(3, 86, 105, 0.3), rgba(46, 185, 223, 0.3));
-  box-shadow: 0 4px 10px rgba(46, 185, 223, 0.5);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+   background: linear-gradient(145deg, rgba(3, 86, 105, 0.3), rgba(46, 185, 223, 0.3));
+   box-shadow: 0 4px 10px rgba(46, 185, 223, 0.5);
+   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .action-btn {
-  outline: none;
-  box-shadow: 0 2px 8px 0 rgba(0,255,255,0.08);
-  transition: box-shadow 0.2s, background 0.2s, border 0.2s, transform 0.1s;
-  will-change: transform, box-shadow;
+   outline: none;
+   box-shadow: 0 2px 8px 0 rgba(0, 255, 255, 0.08);
+   transition: box-shadow 0.2s, background 0.2s, border 0.2s, transform 0.1s;
+   will-change: transform, box-shadow;
 }
 
 /* //~BorderGLow  */
@@ -103,33 +104,33 @@ body {
 
 /* Modern cyan/blue NProgress bar */
 #nprogress {
-  pointer-events: none;
+   pointer-events: none;
 }
 
 #nprogress .bar {
-  background: linear-gradient(90deg, #06b6d4 0%, #2563eb 100%);
-  position: fixed;
-  z-index: 1031;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  box-shadow: 0 0 10px #06b6d4, 0 0 5px #2563eb;
-  border-radius: 0 0 8px 8px;
+   background: linear-gradient(90deg, #06b6d4 0%, #2563eb 100%);
+   position: fixed;
+   z-index: 1031;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 4px;
+   box-shadow: 0 0 10px #06b6d4, 0 0 5px #2563eb;
+   border-radius: 0 0 8px 8px;
 }
 
 #nprogress .peg {
-  display: block;
-  position: absolute;
-  right: 0px;
-  width: 120px;
-  height: 100%;
-  box-shadow: 0 0 15px #06b6d4, 0 0 8px #2563eb;
-  opacity: 1;
-  transform: rotate(3deg) translate(0px, -4px);
-  border-radius: 8px;
+   display: block;
+   position: absolute;
+   right: 0px;
+   width: 120px;
+   height: 100%;
+   box-shadow: 0 0 15px #06b6d4, 0 0 8px #2563eb;
+   opacity: 1;
+   transform: rotate(3deg) translate(0px, -4px);
+   border-radius: 8px;
 }
 
 #nprogress .spinner {
-  display: none !important;
+   display: none !important;
 }

@@ -30,7 +30,8 @@ function HeadlineView({ handleShowModal, bookmarks }) {
          {bookmarks.map((bookmark) => (
             <div
                key={bookmark.id}
-               className='flex flex-col md:flex-row items-start md:items-center justify-between bg-gradient-to-r from-black/70 via-gray-900/70 to-cyan-900/60 border border-cyan-400 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 px-4 py-3 group card'
+               className='flex flex-col md:flex-row items-start md:items-center justify-between bg-gradient-to-r from-black/70 
+               via-cyan-900/60  to-gray-900/70  border border-cyan-400 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 px-4 py-3 group card'
             >
                {/* //~ Bookmark Content */}
                <div className='flex items-center gap-4 w-full md:w-4/5'>

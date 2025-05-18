@@ -1,8 +1,8 @@
 import { Pencil, ExternalLink, MessageCircleQuestion, Trash, Copy } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeBookmark } from '@/store/slices/bookmarksSlice'
+import { removeBookmark, updateBookmark } from '@/store/slices/bookmarksSlice'
 import { db } from '@/lib/firebase'
-import { doc, deleteDoc } from 'firebase/firestore'
+import { doc, deleteDoc, setDoc } from 'firebase/firestore'
 import { toast } from 'sonner'
 
 function CurrentBookmark({ currentBookmark, showBookmarkModal, setShowBookmarkModal }) {
@@ -12,31 +12,19 @@ function CurrentBookmark({ currentBookmark, showBookmarkModal, setShowBookmarkMo
    const handleDelete = async (id) => {
       if (!window.confirm('Are you sure you want to delete this bookmark?')) return
       dispatch(removeBookmark(id))
-      toast.success('Bookmark deleted!')
+
       await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(id)))
       setShowBookmarkModal(false)
-      // Remove from Firestore as well
-      // try {
-      //    const userId = JSON.parse(localStorage.getItem('persist:root'))?.auth
-      //       ? JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)
-      //            .user?.uid
-      //       : null
-      //    if (!userId) return
-      //    // Try both id and link as doc id (for compatibility)
-      //    await deleteDoc(
-      //       doc(
-      //          db,
-      //          'users',
-      //          userId,
-      //          'bookmarks',
-      //          encodeURIComponent(currentBookmark.link)
-      //       )
-      //    )
-      //    // Optionally: await deleteDoc(doc(db, 'users', userId, 'bookmarks', String(idOrLink)))
-      // } catch (err) {
-      //    // Optionally handle error
-      //    console.error('Error deleting bookmark from Firestore:', err)
-      // }
+      toast.success('Bookmark deleted!')
+   }
+
+   const handleUpdate = async (id, bookmark) => {
+      dispatch(updateBookmark(id))
+      await setDoc(doc(db, 'users', userId, 'bookmarks', String(id)), bookmark, {
+         merge: true,
+      }) // Sync to Firestore
+      setShowBookmarkModal(false)
+      toast.success('Bookmark Updated!')
    }
 
    return (
@@ -48,6 +36,7 @@ function CurrentBookmark({ currentBookmark, showBookmarkModal, setShowBookmarkMo
                <button
                   className='group bg-white/10 border border-cyan-300/30 shadow-md hover:bg-cyan-400/30 hover:border-cyan-300/70 active:scale-95 transition-all duration-150 rounded-lg p-1.5 flex items-center justify-center backdrop-blur-lg ring-1 ring-cyan-200/30 hover:ring-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 min-w-0'
                   title='More Info'
+                  onClick={() => handleUpdate(currentBookmark.id, currentBookmark)}
                >
                   <Pencil className='size-4 text-cyan-200 group-hover:text-white transition drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]' />
                </button>

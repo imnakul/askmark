@@ -1,15 +1,5 @@
 import { Footer } from '@/components/ui/footer'
-import {
-   FileText,
-   Youtube,
-   Wrench,
-   Funnel,
-   LayoutList,
-   List,
-   LayoutGrid,
-   CircleDashed,
-   SortAsc,
-} from 'lucide-react'
+import { FileText, Youtube, Wrench, Funnel, LayoutList, List, LayoutGrid, CircleDashed, SortAsc } from 'lucide-react'
 
 import { useState, useRef, useEffect } from 'react'
 import { useScroll, useMotionValueEvent } from 'motion/react'
@@ -53,11 +43,7 @@ function Collections() {
    const getSortedBookmarks = () => {
       let filtered = bookmarks
       if (search.trim()) {
-         filtered = filtered.filter(
-            (b) =>
-               b.title &&
-               b.title.toLowerCase().includes(search.trim().toLowerCase())
-         )
+         filtered = filtered.filter((b) => b.title && b.title.toLowerCase().includes(search.trim().toLowerCase()))
       }
       let sorted = [...filtered]
       switch (sortOption) {
@@ -74,9 +60,7 @@ function Collections() {
             sorted.sort((a, b) => b.title.localeCompare(a.title))
             break
          case 'Favorites':
-            sorted.sort((a, b) =>
-               b.favorite === a.favorite ? 0 : b.favorite ? 1 : -1
-            )
+            sorted.sort((a, b) => (b.favorite === a.favorite ? 0 : b.favorite ? 1 : -1))
             break
          default:
             break
@@ -92,22 +76,13 @@ function Collections() {
       } else {
          setLoading(true)
          try {
-            const response = await fetch(
-               `/api/extract?url=${encodeURIComponent(webUrl)}`
-            )
+            const response = await fetch(`/api/extract?url=${encodeURIComponent(webUrl)}`)
 
             const json = await response.json()
             if (json.success) {
                console.log('Extracted Data:', json.data)
-               const {
-                  category,
-                  shortSummary,
-                  tags,
-                  suggestedTitle,
-                  topicArea,
-                  tone,
-                  suggestedAction,
-               } = json.data.aiAnalysis
+               const { category, shortSummary, tags, suggestedTitle, topicArea, tone, suggestedAction } =
+                  json.data.aiAnalysis
                // Add the bookmark to Redux store
 
                const newBookmark = {
@@ -128,19 +103,9 @@ function Collections() {
 
                dispatch(addBookmark(newBookmark))
                try {
-                  await setDoc(
-                     doc(
-                        db,
-                        'users',
-                        userId,
-                        'bookmarks',
-                        String(newBookmark.id)
-                     ),
-                     newBookmark,
-                     {
-                        merge: true,
-                     }
-                  ) // Sync to Firestore
+                  await setDoc(doc(db, 'users', userId, 'bookmarks', String(newBookmark.id)), newBookmark, {
+                     merge: true,
+                  }) // Sync to Firestore
                   toast.success('Bookmarks synced!')
                } catch (error) {
                   console.error('Error syncing to Firestore:', error)
@@ -167,10 +132,7 @@ function Collections() {
    // Handle click outside to close dropdown
    useEffect(() => {
       function handleClickOutside(event) {
-         if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target)
-         ) {
+         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setShowDropdown(false)
          }
       }
@@ -204,6 +166,40 @@ function Collections() {
 
    const toggleDropdown = (key) => {
       setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }))
+   }
+
+   const handleManualSync = async () => {
+      setLoading(true)
+      try {
+         if (!userId) return
+
+         // Step 1: Push local bookmarks to Firestore
+         await Promise.all(
+            bookmarks.map((bm) =>
+               setDoc(doc(db, 'users', userId, 'bookmarks', String(bm.id)), bm, {
+                  merge: true,
+               })
+            )
+         )
+         // toast.success('Local data pushed to Firestore!')
+
+         // Step 2: Fetch all bookmarks from Firestore
+         const bookmarksRef = collection(db, 'users', userId, 'bookmarks')
+         const snapshot = await getDocs(bookmarksRef)
+         const firestoreBookmarks = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+         }))
+
+         // Update Redux with the latest bookmarks from Firestore
+         dispatch(addBookmark(firestoreBookmarks))
+         toast.success('Data synced successfully!')
+      } catch (err) {
+         console.error('Error during manual sync:', err)
+         toast.error('Error during manual sync. Please try again.')
+      } finally {
+         setLoading(false)
+      }
    }
 
    // useEffect(() => {
@@ -272,7 +268,10 @@ function Collections() {
       <>
          <div className="bg-[url('/3.jpg')] bg-cover bg-center h-full w-full">
             {/* //? Navbar  */}
-            <Navbar QR={QR} setQR={setQR} />
+            <Navbar
+               QR={QR}
+               setQR={setQR}
+            />
 
             <div className='max-w-7xl mx-auto pt-4 '>
                {/* //? QR MODAL */}
@@ -280,9 +279,7 @@ function Collections() {
                   <Modal
                      showModal={QR}
                      setShowModal={setQR}
-                     modalContainerClass={
-                        'w-[80vw] sm:w-full sm:max-w-sm sm:p-10'
-                     }
+                     modalContainerClass={'w-[80vw] sm:w-full sm:max-w-sm sm:p-10'}
                      closeModalOutsideClick={() => setQR(false)}
                      header='Scan / Click to Give me a Boost'
                   >
@@ -291,7 +288,10 @@ function Collections() {
                            href='https://www.buymeacoffee.com/imnakul'
                            target='_blank'
                         >
-                           <img src='/qr.png' className='size-72' />
+                           <img
+                              src='/qr.png'
+                              className='size-72'
+                           />
                         </a>
                      </div>
                   </Modal>
@@ -324,7 +324,7 @@ function Collections() {
                <div className='w-full bg-white/5 flex flex-col items-center justify-end p-2 gap-2 '>
                   {/* //?? Main Bookmark Containter  */}
                   <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between w-full h-auto min-h-16 gap-2 px-2 sm:px-4 py-2 bg-white/5 rounded-md shadow-sm'>
-                     <div className='flex items-center gap-2 w-full sm:w-1/5'>
+                     <div className='flex items-center gap-3 w-full sm:w-1/5'>
                         {/* //~Search  */}
                         <input
                            placeholder='Search Bookmark'
@@ -333,7 +333,10 @@ function Collections() {
                            onChange={(e) => setSearch(e.target.value)}
                         />
                         {/* //~ Filter Dropdown */}
-                        <div className='relative' ref={dropdownRef}>
+                        <div
+                           className='relative'
+                           ref={dropdownRef}
+                        >
                            <button
                               onClick={() => setShowDropdown(!showDropdown)}
                               className={`transition-all duration-500 cursor-pointer ml-1`}
@@ -362,9 +365,7 @@ function Collections() {
 
                                  <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
                                     <Wrench className='size-5' />
-                                    <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>
-                                       Tool
-                                    </span>
+                                    <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>Tool</span>
                                  </button>
                               </div>
                            )}
@@ -380,26 +381,43 @@ function Collections() {
                            </button>
                            {sortDropdown && (
                               <div className='absolute right-0 top-8 mt-2 w-24 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 transform opacity-100 scale-100 transition-all duration-200 origin-top-right'>
-                                 {['Newest', 'Oldest', 'A-Z', 'Z-A'].map(
-                                    (option) => (
-                                       <button
-                                          key={option}
-                                          className={`w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-center gap-3 transition-colors duration-150 ${
-                                             sortOption === option
-                                                ? 'bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300 font-semibold'
-                                                : 'text-gray-700 dark:text-gray-300'
-                                          }`}
-                                          onClick={() => {
-                                             setSortOption(option)
-                                             setSortDropdown(false)
-                                          }}
-                                       >
-                                          {option}
-                                       </button>
-                                    )
-                                 )}
+                                 {['Newest', 'Oldest', 'A-Z', 'Z-A'].map((option) => (
+                                    <button
+                                       key={option}
+                                       className={`w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-center gap-3 transition-colors duration-150 ${
+                                          sortOption === option
+                                             ? 'bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300 font-semibold'
+                                             : 'text-gray-700 dark:text-gray-300'
+                                       }`}
+                                       onClick={() => {
+                                          setSortOption(option)
+                                          setSortDropdown(false)
+                                       }}
+                                    >
+                                       {option}
+                                    </button>
+                                 ))}
                               </div>
                            )}
+                        </div>
+                        <div className='relative'>
+                           <button
+                              onClick={handleManualSync}
+                              title='Manual Sync with Firestore'
+                              className=' cursor-pointer size-5 text-cyan-300 hover:text-cyan-600'
+                           >
+                              <svg
+                                 xmlns='http://www.w3.org/2000/svg'
+                                 width='20'
+                                 height='20'
+                                 viewBox='0 0 24 24'
+                              >
+                                 <path
+                                    fill='currentColor'
+                                    d='M13.03 18c.05.7.21 1.38.47 2h-7c-1.5 0-2.81-.5-3.89-1.57C1.54 17.38 1 16.09 1 14.58c0-1.3.39-2.46 1.17-3.48S4 9.43 5.25 9.15c.42-1.53 1.25-2.77 2.5-3.72S10.42 4 12 4c1.95 0 3.6.68 4.96 2.04C18.32 7.4 19 9.05 19 11h.1c-.74.07-1.45.23-2.1.5V11c0-1.38-.5-2.56-1.46-3.54C14.56 6.5 13.38 6 12 6s-2.56.5-3.54 1.46C7.5 8.44 7 9.62 7 11h-.5c-.97 0-1.79.34-2.47 1.03c-.69.68-1.03 1.5-1.03 2.47s.34 1.79 1.03 2.5c.68.66 1.5 1 2.47 1h6.53M19 13.5V12l-2.25 2.25L19 16.5V15a2.5 2.5 0 0 1 2.5 2.5c0 .4-.09.78-.26 1.12l1.09 1.09c.42-.63.67-1.39.67-2.21c0-2.21-1.79-4-4-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5c0-.4.09-.78.26-1.12l-1.09-1.09c-.42.63-.67 1.39-.67 2.21c0 2.21 1.79 4 4 4V23l2.25-2.25L19 18.5V20Z'
+                                 />
+                              </svg>
+                           </button>
                         </div>
                      </div>
 
