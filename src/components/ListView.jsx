@@ -23,11 +23,11 @@ function ListView({ handleShowModal, bookmarks }) {
 
    return (
       <>
-         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 h-[70vh] overflow-y-auto custom-scrollbar p-2'>
+         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 h-[70vh] overflow-y-auto custom-scrollbar p-2  w-full'>
             {bookmarks.length === 0 && (
                <div
                   className='flex flex-col items-center justify-center h-full 
-               lg:w-[60vw] w-[90vw] md:w-[90vw]'
+                w-[90vw] md:w-[90vw] lg:w-[60vw]'
                >
                   <p className='text-gray-400'>No bookmarks yet.</p>
                </div>
@@ -35,7 +35,7 @@ function ListView({ handleShowModal, bookmarks }) {
             {bookmarks.map((bookmark) => (
                <div
                   key={bookmark.id}
-                  className='relative bg-gradient-to-br from-black/60 via-gray-900/70 to-cyan-900/60 border border-cyan-400 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group flex flex-col h-52 overflow-hidden card'
+                  className='relative bg-gradient-to-br from-black/60 via-gray-900/70 to-cyan-900/60 border border-cyan-400 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group flex flex-col h-52 overflow-hidden card '
                >
                   {/* Favicon and Category */}
                   <div className='flex items-center justify-between px-4 pt-4'>

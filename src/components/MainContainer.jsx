@@ -15,57 +15,34 @@ function MainContainer({
 }) {
    return (
       <div className='flex items-center justify-center w-full h-[58vh] md:h-[76vh] lg:h-[73vh] gap-2 '>
-         <div className='hidden lg:block w-1/6 h-full items-center border border-teal-400 p-4 bg-white/10 rounded-md overflow-y-auto border-r text-sm space-y-6'>
-            {/* Section: General */}
+         {/* //?? SIDEBAR WITH FOLDERS AND FILTERS */}
+         {/* <div className='hidden lg:block w-1/6 h-full items-center border border-teal-400 p-4 bg-white/10 rounded-md overflow-y-auto border-r text-sm space-y-6'>
+            //? Section: General 
             <div className='space-y-2 '>
                <div className='text-gray-300 cursor-pointer text-base'>All bookmarks</div>
                <div className='text-gray-300 ml-4 cursor-pointer'>Unsorted</div>
                <div className='text-gray-300 ml-4 cursor-pointer'>Trash</div>
             </div>
 
-            {/* Section: Collections */}
+            //? Section: Collections 
             <div>
                <div className='flex justify-between items-center uppercase text-xs text-gray-400 mb-2'>
                   <span>Collections</span>
                   <button className='text-teal-500 hover:text-teal-700 text-base leading-none'>＋</button>
                </div>
                <ul className='space-y-2'>
-                  {/* Dropdown: Design Inspiration */}
+                  //? Dropdown: Design Inspiration 
                   {folders.map((folder) => (
                      <li className='flex items-center gap-2 '>
                         <span>{folder.icon}</span> {folder.title}
                         <span className='ml-auto text-gray-400'>{folder.count}</span>
                      </li>
                   ))}
-                  {/* <li>
-                                 <div
-                                    className='flex items-center gap-2  cursor-pointer'
-                                    onClick={() =>
-                                       toggleDropdown('Design Inspiration')
-                                    }
-                                 >
-                                    <span>🎨</span> Design Inspiration
-                                    <span className='ml-auto '>
-                                       {openDropdowns['Design Inspiration']
-                                          ? '−'
-                                          : '+'}
-                                    </span>
-                                 </div>
-                                 {openDropdowns['Design Inspiration'] && (
-                                    <ul className='ml-6 mt-1 space-y-1'>
-                                       <li className='text-gray-600'>
-                                          UI Ideas
-                                       </li>
-                                       <li className='text-gray-600'>
-                                          Color Schemes
-                                       </li>
-                                    </ul>
-                                 )}
-                              </li> */}
+                  
                </ul>
             </div>
 
-            {/* Section: Filters */}
+            //? Section: Filters 
             <div>
                <div className='uppercase text-xs text-gray-400 mb-2'>Filters</div>
                <ul className='space-y-2'>
@@ -81,10 +58,10 @@ function MainContainer({
                   })}
                </ul>
             </div>
-         </div>
+         </div>  */}
 
          {/* //?? MAIN CONTAINER WITH VIEWS RENDERING  */}
-         <div className='w-full lg:w-5/6 h-full items-center p-2  '>
+         <div className='w-full h-full items-center p-2'>
             {loading && (
                <div className='flex items-center gap-2 justify-center h-full px-4 sm:px-6 lg:px-8'>
                   <CircleDashed className='text-cyan-400 font-bold text-4xl sm:text-5xl lg:text-6xl animate-spin mb-4' />
