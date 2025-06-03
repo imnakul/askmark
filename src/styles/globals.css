@@ -19,6 +19,7 @@
 html,
 body {
    font-family: 'Space Grotesk', Arial, Helvetica, sans-serif;
+   scroll-behavior: smooth;
 }
 
 * {

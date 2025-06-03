@@ -36,9 +36,13 @@ function Navbar({ QR, setQR }) {
          snapshot.forEach((docSnap) => {
             dispatch(addBookmark({ ...docSnap.data(), id: docSnap.id }))
          })
+         router.push('/collections')
          setDropdownOpen(false)
+         console.log('Login successful, bookmarks fetched!')
+         toast.success('Login successful! Bookmarks synced.')
       } catch (error) {
          dispatch(loginFailure(error.message))
+         console.error('Login failed:', error)
       }
    }
 
@@ -71,7 +75,7 @@ function Navbar({ QR, setQR }) {
          </div>
 
          {/* //?? DEMO BANNER */}
-         {!isAuthenticated && (
+         {/* {!isAuthenticated && (
             <div
                id='marketing-banner'
                tabindex='-1'
@@ -88,12 +92,11 @@ function Navbar({ QR, setQR }) {
                      onClick={handleGoogleLogin}
                      disabled={loading}
                   >
-                     <span className='sm:flex hidden text-xs sm:text-base'>Sign up with Google</span>
-                     <span className='sm:hidden flex text-xs sm:text-base'>Sign up</span>
+                     <span className='sm:flex hidden text-xs sm:text-base'> Google Sign-In</span>
                   </button>
                </div>
             </div>
-         )}
+         )} */}
 
          <div className='flex items-center gap-4 justify-center px-2 py-1'>
             {/* //?? Avatar */}

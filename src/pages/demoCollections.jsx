@@ -1,23 +1,25 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addBookmark } from '@/store/slices/bookmarksSlice'
-import CurrentBookmark from '@/components/CurrentBookmark'
-import { db } from '@/lib/firebase'
-import { collection, setDoc, doc, getDocs, onSnapshot } from 'firebase/firestore'
-import MainContainer from '@/components/MainContainer'
-import { toast } from 'sonner'
+import { addBookmark, clearBookmarks } from '@/store/slices/bookmarksSlice'
 import { v4 as uuidv4 } from 'uuid'
 import Navbar from '@/components/ui/Navbar'
 import Modal from '@/components/ui/modal'
+import CurrentBookmark from '@/components/CurrentBookmark'
+import MainContainer from '@/components/MainContainer'
 import { Footer } from '@/components/ui/footer'
 import { FileText, Youtube, Wrench, Funnel, LayoutList, List, LayoutGrid, SortAsc } from 'lucide-react'
-import { useScroll, useMotionValueEvent } from 'motion/react'
+import { toast } from 'sonner'
+import { signInWithPopup } from 'firebase/auth'
+import { auth, provider } from '@/lib/firebase'
+import { loginStart, loginSuccess, loginFailure } from '@/store/slices/authSlice'
 
-function Collections() {
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
+import { useRouter } from 'next/router'
+
+function DemoCollections() {
    const dispatch = useDispatch()
    const bookmarks = useSelector((state) => state.bookmarks.bookmarks)
-   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
-   const userId = useSelector((state) => state.auth.user?.uid)
 
    const [visible, setVisible] = useState(false)
    const ref = useRef(null)
@@ -36,6 +38,16 @@ function Collections() {
    const [sortOption, setSortOption] = useState('Newest')
    const [search, setSearch] = useState('')
    const [currentBookmark, setCurrentBookmark] = useState({})
+   const [dropdownOpen, setDropdownOpen] = useState(false)
+   const router = useRouter()
+
+   // Load bookmarks from localStorage on mount
+   // useEffect(() => {
+   //    const localDemoBookmarks = JSON.parse(localStorage.getItem('demoBookmarks')) || []
+   //    if (bookmarks.length === 0 && localDemoBookmarks.length > 0) {
+   //       dispatch(addBookmark(localDemoBookmarks))
+   //    }
+   // }, [dispatch, bookmarks.length])
 
    const getSortedBookmarks = () => {
       let filtered = bookmarks
@@ -67,94 +79,44 @@ function Collections() {
 
    const handleUrlSubmit = async (e) => {
       e.preventDefault()
-
       if (!webUrl) {
          return alert('Please enter a valid URL.')
-      } else {
-         setLoading(true)
-         try {
-            const response = await fetch(`/api/extract?url=${encodeURIComponent(webUrl)}`)
-
-            const json = await response.json()
-            if (json.success) {
-               const { category, shortSummary, tags, suggestedTitle, topicArea, tone, suggestedAction } =
-                  json.data.aiAnalysis
-               const newBookmark = {
-                  id: uuidv4(),
-                  title: json.data.title || 'Untitled',
-                  description: json.data.metaDescription || '',
-                  link: webUrl,
-                  thumbnail: json.data.favicon || '',
-                  tags: [...tags],
-                  createdAt: new Date().toISOString(),
-                  category: category,
-                  shortSummary: shortSummary,
-                  suggestedTitle: suggestedTitle,
-                  topicArea: topicArea,
-                  tone: tone,
-                  suggestedAction: suggestedAction,
-               }
-               dispatch(addBookmark(newBookmark))
-               if (isLoggedIn && userId) {
-                  try {
-                     await setDoc(doc(db, 'users', userId, 'bookmarks', String(newBookmark.id)), newBookmark, {
-                        merge: true,
-                     })
-                     toast.success('Bookmarks synced!')
-                  } catch (error) {
-                     console.error('Error syncing to Firestore:', error)
-                     toast.error('Error syncing to Firestore')
-                  }
-               }
-               setWebUrl('')
-               toast.success('Bookmark added!')
-            } else {
-               toast.error(json.error || 'Failed to extract data.')
-            }
-         } catch (error) {
-            console.error('Error extracting data:', error)
-            toast.error('Error extracting data.')
-         } finally {
-            setLoading(false)
-         }
       }
-   }
-
-   useEffect(() => {
-      if (!isLoggedIn || !userId) return
-      const bookmarksRef = collection(db, 'users', userId, 'bookmarks')
-      const unsubscribe = onSnapshot(bookmarksRef, (snapshot) => {
-         const updatedBookmarks = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-         }))
-         dispatch(addBookmark(updatedBookmarks))
-      })
-      return () => unsubscribe()
-   }, [isLoggedIn, userId, dispatch])
-
-   const handleManualSync = async () => {
       setLoading(true)
       try {
-         if (!userId) return
-         await Promise.all(
-            bookmarks.map((bm) =>
-               setDoc(doc(db, 'users', userId, 'bookmarks', String(bm.id)), bm, {
-                  merge: true,
-               })
-            )
-         )
-         const bookmarksRef = collection(db, 'users', userId, 'bookmarks')
-         const snapshot = await getDocs(bookmarksRef)
-         const firestoreBookmarks = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-         }))
-         dispatch(addBookmark(firestoreBookmarks))
-         toast.success('Data synced successfully!')
-      } catch (err) {
-         console.error('Error during manual sync:', err)
-         toast.error('Error during manual sync. Please try again.')
+         const response = await fetch(`/api/extract?url=${encodeURIComponent(webUrl)}`)
+         const json = await response.json()
+         if (json.success) {
+            const { category, shortSummary, tags, suggestedTitle, topicArea, tone, suggestedAction } =
+               json.data.aiAnalysis
+            const newBookmark = {
+               id: uuidv4(),
+               title: json.data.title || 'Untitled',
+               description: json.data.metaDescription || '',
+               link: webUrl,
+               thumbnail: json.data.favicon || '',
+               tags: [...tags],
+               createdAt: new Date().toISOString(),
+               category: category,
+               shortSummary: shortSummary,
+               suggestedTitle: suggestedTitle,
+               topicArea: topicArea,
+               tone: tone,
+               suggestedAction: suggestedAction,
+            }
+            dispatch(addBookmark(newBookmark))
+
+            // Save to local storage for demo mode
+            // const currentDemoBookmarks = JSON.parse(localStorage.getItem('demoBookmarks')) || []
+            // localStorage.setItem('demoBookmarks', JSON.stringify([...currentDemoBookmarks, newBookmark]))
+            setWebUrl('')
+            toast.success('Bookmark added to demo session!')
+         } else {
+            toast.error(json.error || 'Failed to extract data.')
+         }
+      } catch (error) {
+         console.error('Error extracting data:', error)
+         toast.error('Error extracting data.')
       } finally {
          setLoading(false)
       }
@@ -171,19 +133,6 @@ function Collections() {
       return () => document.removeEventListener('mousedown', handleClickOutside)
    }, [])
 
-   const { scrollY } = useScroll({
-      target: ref,
-      offset: ['start start', 'end start'],
-   })
-
-   useMotionValueEvent(scrollY, 'change', (latest) => {
-      if (latest > 100) {
-         setVisible(true)
-      } else {
-         setVisible(false)
-      }
-   })
-
    const handleShowModal = (bookmark) => {
       setCurrentBookmark(bookmark)
       setShowBookmarkModal(!showbookmarkModal)
@@ -198,17 +147,57 @@ function Collections() {
       setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }))
    }
 
+   const handleGoogleLogin = async () => {
+      dispatch(loginStart())
+      try {
+         const result = await signInWithPopup(auth, provider)
+         const user = result.user
+         dispatch(
+            loginSuccess({
+               uid: user.uid,
+               displayName: user.displayName,
+               email: user.email,
+               photoURL: user.photoURL,
+            })
+         )
+         // Fetch bookmarks from Firestore
+         const bookmarksRef = collection(db, 'users', user.uid, 'bookmarks')
+         const snapshot = await getDocs(bookmarksRef)
+         dispatch(clearBookmarks())
+         snapshot.forEach((docSnap) => {
+            dispatch(addBookmark({ ...docSnap.data(), id: docSnap.id }))
+         })
+         router.push('/collections')
+         setDropdownOpen(false)
+         console.log('Login successful, bookmarks fetched!')
+         toast.success('Login successful! Bookmarks synced.')
+      } catch (error) {
+         dispatch(loginFailure(error.message))
+         console.error('Login failed:', error)
+      }
+   }
+
    return (
       <>
          <div className="bg-[url('/3.jpg')] bg-cover bg-center h-full w-full">
-            {/* //? Navbar  */}
             <Navbar
                QR={QR}
                setQR={setQR}
             />
-
             <div className='max-w-7xl mx-auto pt-4 '>
-               {/* //? QR MODAL */}
+               {/* Demo Mode Banner */}
+
+               <div className='w-full bg-yellow-400 text-black text-center py-2 font-bold rounded mb-2 flex items-center justify-between px-16'>
+                  DEMO MODE: Bookmarks are not saved to the cloud. Log in to sync your bookmarks!
+                  <button
+                     className='flex items-center justify-center gap-2 p-2 rounded-md bg-gradient-to-tr from-cyan-900 to-blue-900 text-white font-bold hover:from-cyan-800 hover:to-blue-600 transition-all duration-200 cursor-pointer w-32'
+                     onClick={handleGoogleLogin}
+                     disabled={loading}
+                  >
+                     <span className=' text-sm'> Google Sign-In</span>
+                  </button>
+               </div>
+               {/* QR MODAL */}
                {QR && (
                   <Modal
                      showModal={QR}
@@ -230,17 +219,11 @@ function Collections() {
                      </div>
                   </Modal>
                )}
-
-               {/* //? Bookmarks Modal */}
+               {/* Bookmarks Modal */}
                {showbookmarkModal && (
                   <Modal
                      showModal={showbookmarkModal}
                      setShowModal={setShowBookmarkModal}
-                     // header={
-                     //    currentBookmark?.title
-                     //       ? `Bookmark Details`
-                     //       : 'Add New Bookmark'
-                     // }
                      modalContainerClass='bg-gradient-to-tr from-black/70 via-blue-700/30 to-black/70 w-[99vw] sm:w-full sm:max-w-6xl rounded-2xl shadow-2xl'
                      closeModalOutsideClick={() => setShowBookmarkModal(false)}
                   >
@@ -253,20 +236,18 @@ function Collections() {
                      )}
                   </Modal>
                )}
-
-               {/* //? MAIN CONTAINER  */}
+               {/* Main Container + Sidebar */}
                <div className='w-full bg-white/5 flex flex-col items-center justify-end p-2 gap-2 '>
-                  {/* //?? Main Bookmark Containter  */}
                   <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between w-full h-auto min-h-16 gap-2 px-2 sm:px-4 py-2 bg-white/5 rounded-md shadow-sm'>
                      <div className='flex items-center gap-3 w-full sm:w-1/5'>
-                        {/* //~Search  */}
+                        {/* Search */}
                         <input
                            placeholder='Search Bookmark'
                            className='py-2 px-3 rounded-md bg-gray-800 border-cyan-300 border w-full text-sm focus:outline-none focus:ring focus:ring-cyan-400'
                            value={search}
                            onChange={(e) => setSearch(e.target.value)}
                         />
-                        {/* //~ Filter Dropdown */}
+                        {/* Filter Dropdown */}
                         <div
                            className='relative'
                            ref={dropdownRef}
@@ -289,14 +270,12 @@ function Collections() {
                                        Document
                                     </span>
                                  </button>
-
                                  <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
                                     <Youtube className='size-5' />
                                     <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>
                                        Video
                                     </span>
                                  </button>
-
                                  <button className='w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 transition-colors duration-150'>
                                     <Wrench className='size-5' />
                                     <span className='space-grotesk text-sm text-gray-700 dark:text-gray-300'>Tool</span>
@@ -304,7 +283,7 @@ function Collections() {
                               </div>
                            )}
                         </div>
-                        {/* //~ Sort Dropdown */}
+                        {/* Sort Dropdown */}
                         <div className='relative'>
                            <button
                               onClick={() => setSortDropdown(!sortDropdown)}
@@ -334,59 +313,11 @@ function Collections() {
                               </div>
                            )}
                         </div>
-                        <div className='relative'>
-                           {isLoggedIn ? (
-                              <button
-                                 onClick={handleManualSync}
-                                 title='Manual Sync with Firestore'
-                                 className=' cursor-pointer size-5 text-cyan-300 hover:text-cyan-600'
-                              >
-                                 <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='20'
-                                    height='20'
-                                    viewBox='0 0 24 24'
-                                 >
-                                    <path
-                                       fill='currentColor'
-                                       d='M13.03 18c.05.7.21 1.38.47 2h-7c-1.5 0-2.81-.5-3.89-1.57C1.54 17.38 1 16.09 1 14.58c0-1.3.39-2.46 1.17-3.48S4 9.43 5.25 9.15c.42-1.53 1.25-2.77 2.5-3.72S10.42 4 12 4c1.95 0 3.6.68 4.96 2.04C18.32 7.4 19 9.05 19 11h.1c-.74.07-1.45.23-2.1.5V11c0-1.38-.5-2.56-1.46-3.54C14.56 6.5 13.38 6 12 6s-2.56.5-3.54 1.46C7.5 8.44 7 9.62 7 11h-.5c-.97 0-1.79.34-2.47 1.03c-.69.68-1.03 1.5-1.03 2.47s.34 1.79 1.03 2.5c.68.66 1.5 1 2.47 1h6.53M19 13.5V12l-2.25 2.25L19 16.5V15a2.5 2.5 0 0 1 2.5 2.5c0 .4-.09.78-.26 1.12l1.09 1.09c.42-.63.67-1.39.67-2.21c0-2.21-1.79-4-4-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5c0-.4.09-.78.26-1.12l-1.09-1.09c-.42.63-.67 1.39-.67 2.21c0 2.21 1.79 4 4 4V23l2.25-2.25L19 18.5V20Z'
-                                    />
-                                 </svg>
-                              </button>
-                           ) : (
-                              <button
-                                 onClick={handleManualSync}
-                                 title='Cloud Sync - Unavailable'
-                                 className=' cursor-pointer size-5 text-red-400 hover:text-red-600'
-                              >
-                                 <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='20'
-                                    height='20'
-                                    viewBox='0 0 24 24'
-                                 >
-                                    <g
-                                       fill='none'
-                                       stroke='currentColor'
-                                       stroke-linejoin='round'
-                                       stroke-width='1.5'
-                                    >
-                                       <path d='M2 14.5A4.5 4.5 0 0 0 6.5 19h12a3.5 3.5 0 0 0 .5-6.965a7 7 0 0 0-13.76-1.857A4.502 4.502 0 0 0 2 14.5Z' />
-                                       <path
-                                          stroke-linecap='round'
-                                          d='m10 11l4 4m-4 0l4-4'
-                                       />
-                                    </g>
-                                 </svg>
-                              </button>
-                           )}
-                        </div>
                      </div>
-
-                     {/* //~ Add bookmark  */}
+                     {/* Add bookmark */}
                      <form
                         className='w-full max-w-lg mx-auto'
-                        onSubmit={(e) => handleUrlSubmit(e)}
+                        onSubmit={handleUrlSubmit}
                      >
                         <label
                            htmlFor='search'
@@ -396,7 +327,6 @@ function Collections() {
                         </label>
                         <div className='relative'>
                            <div className='absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none'>
-                              {/* <BookmarkPlus className={`size-5 `} /> */}
                               <img
                                  src='/add.png'
                                  alt='logo'
@@ -421,21 +351,18 @@ function Collections() {
                            </button>
                         </div>
                      </form>
-
-                     {/* //~View Modes  */}
+                     {/* View Modes */}
                      <div
                         className='inline-flex rounded-md justify-center items-center w-full sm:w-auto mt-2 sm:mt-0'
                         role='group'
                      >
                         <button
                            type='button'
-                           className={`px-4 py-2 text-sm font-medium border border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150
-                              rounded-s-lg
-                              ${
-                                 listView
-                                    ? 'bg-cyan-600 text-white shadow font-bold scale-105'
-                                    : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
-                              }`}
+                           className={`px-4 py-2 text-sm font-medium border border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150 rounded-s-lg ${
+                              listView
+                                 ? 'bg-cyan-600 text-white shadow font-bold scale-105'
+                                 : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
+                           }`}
                            onClick={() => {
                               setListView(true)
                               setCardView(false)
@@ -448,12 +375,11 @@ function Collections() {
                         </button>
                         <button
                            type='button'
-                           className={`px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150
-                              ${
-                                 cardView
-                                    ? 'bg-cyan-600 text-white shadow font-bold scale-105'
-                                    : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
-                              }`}
+                           className={`px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150 ${
+                              cardView
+                                 ? 'bg-cyan-600 text-white shadow font-bold scale-105'
+                                 : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
+                           }`}
                            onClick={() => {
                               setCardView(true)
                               setListView(false)
@@ -466,13 +392,11 @@ function Collections() {
                         </button>
                         <button
                            type='button'
-                           className={`px-4 py-2 text-sm font-medium border border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150
-                              rounded-e-lg
-                              ${
-                                 headlineView
-                                    ? 'bg-cyan-600 text-white shadow font-bold scale-105'
-                                    : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
-                              }`}
+                           className={`px-4 py-2 text-sm font-medium border border-gray-200 focus:z-10 focus:ring-2 focus:ring-cyan-400 dark:border-gray-700 transition-all duration-150 rounded-e-lg ${
+                              headlineView
+                                 ? 'bg-cyan-600 text-white shadow font-bold scale-105'
+                                 : 'bg-white text-gray-900 hover:bg-gray-100 hover:text-cyan-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
+                           }`}
                            onClick={() => {
                               setHeadlineView(true)
                               setCardView(false)
@@ -485,7 +409,6 @@ function Collections() {
                         </button>
                      </div>
                   </div>
-                  {/* //~ Main Container + Sidebar  */}
                   <MainContainer
                      handleShowModal={handleShowModal}
                      sortedBookmarks={getSortedBookmarks()}
@@ -495,8 +418,6 @@ function Collections() {
                      headlineView={headlineView}
                   />
                </div>
-
-               {/* //? Footer */}
                <Footer />
             </div>
          </div>
@@ -504,4 +425,4 @@ function Collections() {
    )
 }
 
-export default Collections
+export default DemoCollections
