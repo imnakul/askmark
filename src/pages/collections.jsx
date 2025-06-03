@@ -200,14 +200,28 @@ function Collections() {
 
    return (
       <>
-         <div className="bg-[url('/3.jpg')] bg-cover bg-center h-full w-full">
+         <div className="bg-[url('/2.png')] bg-cover bg-center h-full w-full">
+            {/* <div className='relative h-full w-full'>
+            <video
+               autoPlay
+               loop
+               muted
+               playsInline
+               className='absolute top-0 left-0 w-full h-full object-cover z-2 '
+            >
+               <source
+                  src='/vd.mp4'
+                  type='video/mp4'
+               />
+               Your browser does not support the video tag.
+            </video> */}
             {/* //? Navbar  */}
             <Navbar
                QR={QR}
                setQR={setQR}
             />
 
-            <div className='max-w-7xl mx-auto pt-4 '>
+            <div className='max-w-7xl mx-auto pt-4 relative z-10'>
                {/* //? QR MODAL */}
                {QR && (
                   <Modal

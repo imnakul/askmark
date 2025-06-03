@@ -45,7 +45,10 @@ function ContactForm() {
 
    return (
       <div className='bg-white/30 dark:bg-black/30 p-2 sm:p-4 rounded-lg'>
-         <form onSubmit={handleFormSubmit} className='space-y-4'>
+         <form
+            onSubmit={handleFormSubmit}
+            className='space-y-4'
+         >
             {/* Name Field (Optional) */}
             <div>
                <label
@@ -104,9 +107,7 @@ function ContactForm() {
                            onMouseEnter={() => setHover(ratingValue)}
                            onMouseLeave={() => setHover(0)}
                            className={`p-1 focus:outline-none transition-colors duration-200 ${
-                              (hover || rating) >= ratingValue
-                                 ? 'text-yellow-400'
-                                 : 'text-gray-300 dark:text-gray-600'
+                              (hover || rating) >= ratingValue ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'
                            }`}
                         >
                            <Star className='w-8 h-8' />
@@ -114,7 +115,11 @@ function ContactForm() {
                      )
                   })}
                </div>
-               <input type='hidden' name='rating' value={rating} />
+               <input
+                  type='hidden'
+                  name='rating'
+                  value={rating}
+               />
             </div>
 
             {/* Feedback/Message Field (Required) */}
@@ -153,12 +158,10 @@ function ContactForm() {
                </button>
             </div>
          </form>
-         <p className=' flex-col flex text-gray-900 dark:text-gray-300 mt-3 inter text-sm'>
-            "Did you like the project? Then say with love:"
+         <p className=' flex-col flex text-gray-900 dark:text-gray-300 mt-4 inter text-sm'>
+            <em>Did you like the product? Then say with love:</em>
          </p>
-         <span className='font-bold pace-grotesk text-lg text-gray-900 dark:text-gray-300'>
-            Jai Shree Krishna! 🙏
-         </span>{' '}
+         <span className='font-bold pace-grotesk text-lg text-gray-900 dark:text-gray-300'>Jai Shree Krishna! 🙏</span>{' '}
       </div>
    )
 }

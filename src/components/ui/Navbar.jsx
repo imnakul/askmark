@@ -57,7 +57,7 @@ function Navbar({ QR, setQR }) {
    }
 
    return (
-      <div className='navbar bg-gradient-to-r from-black/20 to-white/10 shadow-sm max-w-7xl w-full mx-auto rounded-md flex items-center justify-between px-4'>
+      <div className='navbar relative z-10 bg-gradient-to-r from-black/20 to-white/10 shadow-sm max-w-7xl w-full mx-auto rounded-md flex items-center justify-between px-4'>
          <div className='flex items-center gap-1 cursor-pointer'>
             <img
                src='/logo4.png'
@@ -107,7 +107,7 @@ function Navbar({ QR, setQR }) {
                   onClick={() => setDropdownOpen((v) => !v)}
                >
                   <div className='ring-cyan-400  ring-offset-base-100 w-8 h-8 rounded-full ring ring-offset-2'>
-                     <img src={user?.photoURL || 'https://img.daisyui.com/images/profile/demo/spiderperson@192.webp'} />
+                     <img src={user?.photoURL} />
                   </div>
                </div>
                {dropdownOpen && (
